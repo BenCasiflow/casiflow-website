@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms &amp; Conditions — Casiflow</title>
+  <meta name="description" content="Casiflow's Terms and Conditions — the rules governing your use of the Service." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #0f172a;
+      color: #e2e8f0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; }
+
+    /* ============================================================
+       SCROLL ANIMATIONS
+    ============================================================ */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ============================================================
+       NAVIGATION
+    ============================================================ */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(6,13,26,0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+    }
+    .nav.scrolled {
+      border-bottom-color: rgba(56,189,248,0.12);
+      box-shadow: 0 4px 32px rgba(0,0,0,0.45);
+      background: rgba(6,13,26,0.97);
+    }
+    .nav-inner {
+      max-width: 1280px; margin: 0 auto; padding: 0 32px;
+      height: 68px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Inter', sans-serif;
+      font-size: 22px; font-weight: 800; color: #38bdf8;
+      letter-spacing: -0.5px; flex-shrink: 0;
+    }
+    .nav-links {
+      display: flex; align-items: center; gap: 28px; list-style: none;
+    }
+    .nav-links a {
+      color: rgba(255,255,255,0.68); font-size: 14px; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #38bdf8; }
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+
+    .btn-outline {
+      display: inline-block; padding: 8px 18px;
+      border: 1px solid rgba(56,189,248,0.4); border-radius: 8px;
+      color: #38bdf8; font-size: 14px; font-weight: 600;
+      background: transparent; cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .btn-outline:hover { background: rgba(56,189,248,0.08); border-color: #38bdf8; }
+
+    .btn-teal {
+      display: inline-block; padding: 9px 20px;
+      border: none; border-radius: 8px;
+      background: linear-gradient(135deg, #0ea5e9, #0369a1);
+      color: white; font-size: 14px; font-weight: 700; cursor: pointer;
+      transition: opacity 0.2s, box-shadow 0.2s, transform 0.2s;
+      box-shadow: 0 4px 12px rgba(14,165,233,0.3);
+    }
+    .btn-teal:hover {
+      opacity: 0.92; box-shadow: 0 6px 20px rgba(14,165,233,0.45);
+      transform: translateY(-1px);
+    }
+
+    /* Hamburger */
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 4px; background: none; border: none;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 2px; background: #e2e8f0;
+      border-radius: 2px; transition: all 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    /* Mobile menu */
+    .mobile-menu {
+      display: none; position: absolute; top: 68px; left: 0; right: 0;
+      background: rgba(6,13,26,0.98);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(56,189,248,0.1);
+      padding: 20px 28px 28px; flex-direction: column;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      display: block; padding: 13px 0; color: rgba(255,255,255,0.78);
+      font-size: 16px; font-weight: 500;
+      border-bottom: 1px solid rgba(255,255,255,0.06); transition: color 0.2s;
+    }
+    .mobile-menu a:last-of-type { border-bottom: none; }
+    .mobile-menu a:hover { color: #38bdf8; }
+    .mobile-menu-actions { display: flex; gap: 12px; padding-top: 20px; }
+    .mobile-menu-actions .btn-outline,
+    .mobile-menu-actions .btn-teal { flex: 1; text-align: center; }
+
+    /* ============================================================
+       PAGE HERO — compact inner-page variant
+    ============================================================ */
+    .page-hero {
+      background: #0f172a;
+      padding: 112px 32px 36px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(14,165,233,0.07) 0%, transparent 65%);
+      z-index: 0;
+    }
+    .page-hero-inner {
+      position: relative; z-index: 1;
+      max-width: 640px; margin: 0 auto;
+    }
+    .section-label {
+      display: inline-block; font-size: 11px; font-weight: 700; color: #0ea5e9;
+      letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 16px;
+    }
+    .page-hero-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 2.2vw, 2.5rem);
+      font-weight: 900; color: #f8fafc; line-height: 1.12;
+      letter-spacing: -0.5px; margin-bottom: 12px;
+    }
+    .page-hero-sub {
+      font-size: 14px; color: rgba(255,255,255,0.38);
+      font-style: italic; letter-spacing: 0.2px;
+    }
+
+    /* ============================================================
+       TERMS CONTENT
+    ============================================================ */
+    .policy-section {
+      background: #0b1628;
+      padding: 64px 32px 96px;
+    }
+    .policy-inner {
+      max-width: 800px; margin: 0 auto;
+    }
+
+    /* Preamble */
+    .policy-preamble {
+      font-size: 15.5px; color: rgba(255,255,255,0.62);
+      line-height: 1.85; margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid rgba(56,189,248,0.1);
+    }
+
+    /* Section blocks */
+    .policy-block { margin-bottom: 48px; }
+    .policy-block:last-child { margin-bottom: 0; }
+
+    .policy-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(18px, 2vw, 22px); font-weight: 700;
+      color: #f8fafc; line-height: 1.2; margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(56,189,248,0.1);
+    }
+
+    .policy-body p {
+      font-size: 15.5px; color: rgba(255,255,255,0.62);
+      line-height: 1.85; margin-bottom: 16px;
+    }
+    .policy-body p:last-child { margin-bottom: 0; }
+
+    .policy-body a {
+      color: #38bdf8; text-decoration: underline;
+      text-decoration-color: rgba(56,189,248,0.35);
+      transition: color 0.2s, text-decoration-color 0.2s;
+    }
+    .policy-body a:hover {
+      color: #7dd3fc;
+      text-decoration-color: rgba(125,211,252,0.5);
+    }
+
+    /* Teal dot bullet list — eligibility, acceptable use, responsible gambling */
+    .dot-list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 12px;
+      margin: 14px 0 4px;
+    }
+    .dot-list li {
+      display: flex; align-items: flex-start; gap: 12px;
+      font-size: 15px; color: rgba(255,255,255,0.62); line-height: 1.65;
+    }
+    .dot-list li::before {
+      content: '';
+      display: inline-block;
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #0ea5e9;
+      flex-shrink: 0;
+      margin-top: 8px;
+    }
+
+    /* Contact block */
+    .contact-block {
+      margin-top: 16px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .contact-block p {
+      font-size: 15px; color: rgba(255,255,255,0.62); line-height: 1.6; margin: 0;
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    .footer {
+      background: #060d1a;
+      border-top: 1px solid rgba(56,189,248,0.07);
+      padding: 64px 32px 0;
+    }
+    .footer-main {
+      max-width: 1280px; margin: 0 auto;
+      display: grid; grid-template-columns: 2fr 1.5fr 1.5fr; gap: 56px;
+      padding-bottom: 48px;
+    }
+    .footer-brand { font-family: 'Inter', sans-serif; font-size: 24px; font-weight: 800; color: #38bdf8; letter-spacing: -0.5px; margin-bottom: 12px; }
+    .footer-tagline { font-size: 14px; color: rgba(255,255,255,0.38); line-height: 1.6; max-width: 230px; }
+    .footer-col-title { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.32); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 18px; }
+    .footer-list { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+    .footer-list a { font-size: 14px; color: rgba(255,255,255,0.48); transition: color 0.2s; }
+    .footer-list a:hover { color: #38bdf8; }
+    .footer-bottom {
+      max-width: 1280px; margin: 0 auto;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 20px 0;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-copy { font-size: 13px; color: rgba(255,255,255,0.28); }
+    .footer-legal { display: flex; gap: 20px; }
+    .footer-legal a { font-size: 13px; color: rgba(255,255,255,0.28); transition: color 0.2s; }
+    .footer-legal a:hover { color: #38bdf8; }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 960px) {
+      .footer-main { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .nav-links   { display: none; }
+      .nav-actions { display: none; }
+      .hamburger   { display: flex; }
+      .nav-inner   { padding: 0 20px; }
+      .page-hero   { padding: 100px 20px 28px; }
+      .page-hero-headline { font-size: 1.8rem; }
+      .policy-section { padding: 48px 20px 72px; }
+      .policy-heading { font-size: 18px; }
+      .footer-main { grid-template-columns: 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+      .footer-legal { flex-wrap: wrap; justify-content: center; }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ================================================================
+     NAVIGATION
+================================================================ -->
+<nav class="nav" id="mainNav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Casiflow</a>
+
+    <ul class="nav-links">
+      <li><a href="features.html">Features</a></li>
+      <li><a href="responsible-gambling.html">Responsible Gambling</a></li>
+      <li><a href="playbook.html">The Playbook</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <a href="https://app.casiflow.com/login"  class="btn-outline">Log In</a>
+      <a href="https://app.casiflow.com/signup" class="btn-teal">Sign Up</a>
+    </div>
+
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="features.html">Features</a>
+    <a href="responsible-gambling.html">Responsible Gambling</a>
+    <a href="playbook.html">The Playbook</a>
+    <a href="faq.html">FAQ</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <div class="mobile-menu-actions">
+      <a href="https://app.casiflow.com/login"  class="btn-outline">Log In</a>
+      <a href="https://app.casiflow.com/signup" class="btn-teal">Sign Up Free</a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ================================================================
+     PAGE HERO
+================================================================ -->
+<section class="page-hero">
+  <div class="page-hero-inner fade-in">
+    <span class="section-label">Legal</span>
+    <h1 class="page-hero-headline">Terms &amp; Conditions</h1>
+    <p class="page-hero-sub">Last updated: April 2026</p>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     TERMS CONTENT
+================================================================ -->
+<section class="policy-section">
+  <div class="policy-inner fade-in">
+
+    <p class="policy-preamble">Please read these Terms and Conditions carefully before using Casiflow. By creating an account and using our service, you agree to be bound by these terms. If you do not agree with these terms, please do not use the Service.</p>
+
+    <!-- 1. About Casiflow -->
+    <div class="policy-block">
+      <h2 class="policy-heading">1. About Casiflow</h2>
+      <div class="policy-body">
+        <p>Casiflow is a personal finance tracking tool that allows users to monitor their casino spending across multiple platforms. Casiflow is not a gambling operator, does not facilitate gambling, and is not affiliated with any casino or gambling company. Casiflow is operated under the trading name Casiflow and can be contacted at <a href="mailto:support@casiflow.com">support@casiflow.com</a>.</p>
+      </div>
+    </div>
+
+    <!-- 2. Eligibility -->
+    <div class="policy-block">
+      <h2 class="policy-heading">2. Eligibility</h2>
+      <div class="policy-body">
+        <p>You must be at least 18 years of age to use Casiflow. By creating an account you confirm that:</p>
+        <ul class="dot-list">
+          <li>You are 18 years of age or older</li>
+          <li>Using a gambling tracking tool is legal in your jurisdiction</li>
+          <li>You are not located in a jurisdiction where access to gambling-related services is prohibited</li>
+          <li>All information you provide during registration is accurate and truthful</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 3. Your Account -->
+    <div class="policy-block">
+      <h2 class="policy-heading">3. Your Account</h2>
+      <div class="policy-body">
+        <p>You are responsible for maintaining the security of your account credentials. You must not share your account with others or allow unauthorised access. You are responsible for all activity that occurs under your account. If you suspect unauthorised access to your account, you must notify us immediately at <a href="mailto:support@casiflow.com">support@casiflow.com</a>. We reserve the right to suspend or terminate your account if we believe these terms have been violated.</p>
+      </div>
+    </div>
+
+    <!-- 4. Acceptable Use -->
+    <div class="policy-block">
+      <h2 class="policy-heading">4. Acceptable Use</h2>
+      <div class="policy-body">
+        <p>You agree to use Casiflow only for its intended purpose of tracking your personal gambling activity. You must not:</p>
+        <ul class="dot-list">
+          <li>Use the Service for any unlawful purpose</li>
+          <li>Attempt to gain unauthorised access to any part of the Service</li>
+          <li>Interfere with or disrupt the Service or its infrastructure</li>
+          <li>Upload malicious code or files</li>
+          <li>Impersonate any person or entity</li>
+          <li>Use the Service in any way that could damage, disable or impair it</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 5. Data You Enter -->
+    <div class="policy-block">
+      <h2 class="policy-heading">5. Data You Enter</h2>
+      <div class="policy-body">
+        <p>All transaction data entered into Casiflow is provided by you manually or via file upload. Casiflow does not connect to casino accounts directly and does not verify the accuracy of data you enter. You are responsible for the accuracy of the data you input. Casiflow accepts no liability for decisions made based on inaccurate data you have entered.</p>
+      </div>
+    </div>
+
+    <!-- 6. Not Financial or Legal Advice -->
+    <div class="policy-block">
+      <h2 class="policy-heading">6. Not Financial or Legal Advice</h2>
+      <div class="policy-body">
+        <p>Casiflow provides spending tracking and summary information only. Nothing in the Casiflow service constitutes financial advice, legal advice, or gambling advice. Spending alerts and limit notifications are informational tools only and do not replace professional advice. You should seek independent professional advice before making any financial decisions.</p>
+      </div>
+    </div>
+
+    <!-- 7. Affiliate Recommendations -->
+    <div class="policy-block">
+      <h2 class="policy-heading">7. Affiliate Recommendations</h2>
+      <div class="policy-body">
+        <p>Casiflow may display recommended casinos in the app and on the website. These recommendations may be affiliate links through which Casiflow earns a commission if you register or deposit at a recommended casino. This commission is earned at no additional cost to you. Recommended casinos are selected based on licensing, reputation and player protection standards. Casiflow only recommends regulated operators.</p>
+        <p>However, Casiflow does not accept responsibility for the conduct, practices or policies of any third party casino operator. You use any recommended casino at your own risk and should review their own terms and conditions before registering.</p>
+      </div>
+    </div>
+
+    <!-- 8. Responsible Gambling -->
+    <div class="policy-block">
+      <h2 class="policy-heading">8. Responsible Gambling</h2>
+      <div class="policy-body">
+        <p>Casiflow is designed to support responsible gambling by helping players track their spending across multiple platforms. We strongly encourage all users to:</p>
+        <ul class="dot-list">
+          <li>Set deposit and loss limits within the Service</li>
+          <li>Take regular breaks from gambling</li>
+          <li>Never gamble with money they cannot afford to lose</li>
+          <li>Use national self-exclusion registers if gambling becomes a problem</li>
+        </ul>
+        <p style="margin-top:16px;">If you feel your gambling is becoming a problem, we encourage you to use the responsible gambling resources available in the app and to self-exclude via your national self-exclusion register. For more information visit our <a href="responsible-gambling.html">Responsible Gambling page</a>.</p>
+      </div>
+    </div>
+
+    <!-- 9. Intellectual Property -->
+    <div class="policy-block">
+      <h2 class="policy-heading">9. Intellectual Property</h2>
+      <div class="policy-body">
+        <p>All content, design, graphics, logos and software within the Service are the intellectual property of Casiflow and are protected by applicable copyright and trademark laws. You may not reproduce, distribute or create derivative works from any part of the Service without our express written permission.</p>
+      </div>
+    </div>
+
+    <!-- 10. Privacy -->
+    <div class="policy-block">
+      <h2 class="policy-heading">10. Privacy</h2>
+      <div class="policy-body">
+        <p>Your use of the Service is also governed by our Privacy Policy, which is incorporated into these Terms by reference. By using the Service you agree to the collection and use of your data as described in our Privacy Policy. You can view our Privacy Policy at <a href="privacy-policy.html">www.casiflow.com/privacy-policy.html</a>.</p>
+      </div>
+    </div>
+
+    <!-- 11. Service Availability -->
+    <div class="policy-block">
+      <h2 class="policy-heading">11. Service Availability</h2>
+      <div class="policy-body">
+        <p>Casiflow is provided on an as-is and as-available basis. We do not guarantee that the Service will be error-free, uninterrupted or available at all times. We reserve the right to modify, suspend or discontinue the Service at any time with or without notice. We will not be liable to you or any third party for any modification, suspension or discontinuation of the Service.</p>
+      </div>
+    </div>
+
+    <!-- 12. Limitation of Liability -->
+    <div class="policy-block">
+      <h2 class="policy-heading">12. Limitation of Liability</h2>
+      <div class="policy-body">
+        <p>To the maximum extent permitted by applicable law, Casiflow and its operators shall not be liable for any indirect, incidental, special, consequential or punitive damages, including but not limited to loss of data, loss of profits or any other losses arising from your use of or inability to use the Service.</p>
+        <p>Our total liability to you for any claim arising from your use of the Service shall not exceed the amount you have paid us in the twelve months prior to the claim. As Casiflow is a free service, this amount is zero.</p>
+        <p>Nothing in these terms limits our liability for death or personal injury caused by our negligence, fraud or any other liability that cannot be excluded by law.</p>
+      </div>
+    </div>
+
+    <!-- 13. Indemnification -->
+    <div class="policy-block">
+      <h2 class="policy-heading">13. Indemnification</h2>
+      <div class="policy-body">
+        <p>You agree to indemnify and hold harmless Casiflow and its operators from any claims, damages, losses or expenses including legal fees arising from your use of the Service, your violation of these terms or your violation of any rights of a third party.</p>
+      </div>
+    </div>
+
+    <!-- 14. Changes to These Terms -->
+    <div class="policy-block">
+      <h2 class="policy-heading">14. Changes to These Terms</h2>
+      <div class="policy-body">
+        <p>We may update these Terms and Conditions from time to time to reflect changes in our practices or legal requirements. We will notify you of any significant changes by email or through the Service. Your continued use of Casiflow after changes are posted constitutes your acceptance of the updated terms.</p>
+      </div>
+    </div>
+
+    <!-- 15. Termination -->
+    <div class="policy-block">
+      <h2 class="policy-heading">15. Termination</h2>
+      <div class="policy-body">
+        <p>We reserve the right to terminate or suspend your account at any time without notice if we believe you have violated these terms or for any other reason at our sole discretion. Upon termination your right to use the Service will immediately cease. You may also delete your account at any time from your Profile page.</p>
+      </div>
+    </div>
+
+    <!-- 16. Governing Law -->
+    <div class="policy-block">
+      <h2 class="policy-heading">16. Governing Law</h2>
+      <div class="policy-body">
+        <p>These Terms and Conditions are governed by the laws of Malta. Any disputes arising from these terms or your use of the Service shall be subject to the exclusive jurisdiction of the courts of Malta.</p>
+      </div>
+    </div>
+
+    <!-- 17. Severability -->
+    <div class="policy-block">
+      <h2 class="policy-heading">17. Severability</h2>
+      <div class="policy-body">
+        <p>If any provision of these Terms is found to be invalid or unenforceable, the remaining provisions will continue in full force and effect.</p>
+      </div>
+    </div>
+
+    <!-- 18. Entire Agreement -->
+    <div class="policy-block">
+      <h2 class="policy-heading">18. Entire Agreement</h2>
+      <div class="policy-body">
+        <p>These Terms and Conditions together with our Privacy Policy constitute the entire agreement between you and Casiflow regarding your use of the Service and supersede all prior agreements and understandings.</p>
+      </div>
+    </div>
+
+    <!-- 19. Contact -->
+    <div class="policy-block">
+      <h2 class="policy-heading">19. Contact</h2>
+      <div class="policy-body">
+        <p>If you have any questions about these Terms and Conditions please contact us at:</p>
+        <div class="contact-block">
+          <p>Email: <a href="mailto:support@casiflow.com">support@casiflow.com</a></p>
+          <p>Website: <a href="contact.html">www.casiflow.com/contact</a></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ================================================================
+     FOOTER
+================================================================ -->
+<footer class="footer">
+  <div class="footer-main">
+    <div>
+      <div class="footer-brand">Casiflow</div>
+      <p class="footer-tagline">The house tracks everything. So should you.</p>
+    </div>
+
+    <div>
+      <p class="footer-col-title">Navigation</p>
+      <ul class="footer-list">
+        <li><a href="features.html">Features</a></li>
+        <li><a href="responsible-gambling.html">Responsible Gambling</a></li>
+        <li><a href="playbook.html">The Playbook</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="footer-col-title">Legal</p>
+      <ul class="footer-list">
+        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+        <li><a href="terms.html">Terms &amp; Conditions</a></li>
+        <li><a href="responsible-gambling.html">Responsible Gambling</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="partner.html">Partner with us</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2026 Casiflow. All rights reserved.</p>
+    <div class="footer-legal">
+      <a href="privacy-policy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ================================================================
+     JAVASCRIPT
+================================================================ -->
+<script>
+  /* --- Nav scroll shadow --- */
+  const nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+  }, { passive: true });
+
+  /* --- Hamburger menu --- */
+  const hamburger  = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  hamburger.addEventListener('click', () => {
+    const open = mobileMenu.classList.toggle('open');
+    hamburger.classList.toggle('open', open);
+    hamburger.setAttribute('aria-expanded', open);
+  });
+
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      hamburger.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  /* --- Page load fade-in --- */
+  document.querySelectorAll('.fade-in').forEach(el => {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -30px 0px' });
+    io.observe(el);
+  });
+</script>
+
+</body>
+</html>

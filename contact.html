@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — Casiflow</title>
+  <meta name="description" content="Got a question or feedback? Get in touch with the Casiflow team." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #0f172a;
+      color: #e2e8f0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; }
+
+    /* ============================================================
+       SCROLL ANIMATIONS
+    ============================================================ */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+    .delay-1 { transition-delay: 0.10s; }
+    .delay-2 { transition-delay: 0.20s; }
+    .delay-3 { transition-delay: 0.30s; }
+    .delay-4 { transition-delay: 0.40s; }
+
+    /* ============================================================
+       NAVIGATION
+    ============================================================ */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(6,13,26,0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+    }
+    .nav.scrolled {
+      border-bottom-color: rgba(56,189,248,0.12);
+      box-shadow: 0 4px 32px rgba(0,0,0,0.45);
+      background: rgba(6,13,26,0.97);
+    }
+    .nav-inner {
+      max-width: 1280px; margin: 0 auto; padding: 0 32px;
+      height: 68px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Inter', sans-serif;
+      font-size: 22px; font-weight: 800; color: #38bdf8;
+      letter-spacing: -0.5px; flex-shrink: 0;
+    }
+    .nav-links {
+      display: flex; align-items: center; gap: 28px; list-style: none;
+    }
+    .nav-links a {
+      color: rgba(255,255,255,0.68); font-size: 14px; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: #38bdf8; }
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+
+    .btn-outline {
+      display: inline-block; padding: 8px 18px;
+      border: 1px solid rgba(56,189,248,0.4); border-radius: 8px;
+      color: #38bdf8; font-size: 14px; font-weight: 600;
+      background: transparent; cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .btn-outline:hover { background: rgba(56,189,248,0.08); border-color: #38bdf8; }
+
+    .btn-teal {
+      display: inline-block; padding: 9px 20px;
+      border: none; border-radius: 8px;
+      background: linear-gradient(135deg, #0ea5e9, #0369a1);
+      color: white; font-size: 14px; font-weight: 700; cursor: pointer;
+      transition: opacity 0.2s, box-shadow 0.2s, transform 0.2s;
+      box-shadow: 0 4px 12px rgba(14,165,233,0.3);
+    }
+    .btn-teal:hover {
+      opacity: 0.92; box-shadow: 0 6px 20px rgba(14,165,233,0.45);
+      transform: translateY(-1px);
+    }
+
+    /* Hamburger */
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 4px; background: none; border: none;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 2px; background: #e2e8f0;
+      border-radius: 2px; transition: all 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    /* Mobile menu */
+    .mobile-menu {
+      display: none; position: absolute; top: 68px; left: 0; right: 0;
+      background: rgba(6,13,26,0.98);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(56,189,248,0.1);
+      padding: 20px 28px 28px; flex-direction: column;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      display: block; padding: 13px 0; color: rgba(255,255,255,0.78);
+      font-size: 16px; font-weight: 500;
+      border-bottom: 1px solid rgba(255,255,255,0.06); transition: color 0.2s;
+    }
+    .mobile-menu a:last-of-type { border-bottom: none; }
+    .mobile-menu a:hover, .mobile-menu a.active { color: #38bdf8; }
+    .mobile-menu-actions { display: flex; gap: 12px; padding-top: 20px; }
+    .mobile-menu-actions .btn-outline,
+    .mobile-menu-actions .btn-teal { flex: 1; text-align: center; }
+
+    /* ============================================================
+       PAGE HERO — compact inner-page variant
+    ============================================================ */
+    .page-hero {
+      background: #0f172a;
+      padding: 112px 32px 16px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(14,165,233,0.07) 0%, transparent 65%);
+      z-index: 0;
+    }
+    .page-hero-inner {
+      position: relative; z-index: 1;
+      max-width: 640px; margin: 0 auto;
+    }
+    .section-label {
+      display: inline-block; font-size: 11px; font-weight: 700; color: #0ea5e9;
+      letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 16px;
+    }
+    .page-hero-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 2.2vw, 2.5rem);
+      font-weight: 900; color: #f8fafc; line-height: 1.12;
+      letter-spacing: -0.5px; margin-bottom: 16px;
+    }
+    .page-hero-sub {
+      font-size: 17px; color: rgba(255,255,255,0.58); line-height: 1.65;
+      max-width: 520px; margin: 0 auto;
+    }
+
+    /* ============================================================
+       CONTACT FORM SECTION
+    ============================================================ */
+    .contact-section {
+      background: #0b1628;
+      padding: 40px 32px 64px;
+    }
+    .contact-section-inner {
+      max-width: 600px; margin: 0 auto;
+    }
+
+    /* Form card */
+    .form-card {
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(56,189,248,0.14);
+      border-radius: 20px;
+      padding: 44px 40px;
+      box-shadow:
+        0 0 48px rgba(14,165,233,0.06),
+        0 24px 64px rgba(0,0,0,0.45);
+    }
+
+    /* Field groups */
+    .field-group {
+      margin-bottom: 22px;
+    }
+    .field-group:last-of-type { margin-bottom: 0; }
+
+    .field-label {
+      display: block;
+      font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.65);
+      margin-bottom: 8px; letter-spacing: 0.2px;
+    }
+
+    .field-input,
+    .field-select,
+    .field-textarea {
+      width: 100%;
+      background: rgba(30,41,59,0.7);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 13px 16px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px; font-weight: 400;
+      color: #f1f5f9;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .field-input::placeholder,
+    .field-textarea::placeholder {
+      color: rgba(255,255,255,0.28);
+    }
+    .field-input:focus,
+    .field-select:focus,
+    .field-textarea:focus {
+      border-color: rgba(56,189,248,0.55);
+      box-shadow: 0 0 0 3px rgba(14,165,233,0.12);
+      background: rgba(30,41,59,0.9);
+    }
+    .field-input.error,
+    .field-select.error,
+    .field-textarea.error {
+      border-color: rgba(56,189,248,0.7);
+      box-shadow: 0 0 0 3px rgba(14,165,233,0.15);
+    }
+
+    /* Select wrapper for custom arrow */
+    .select-wrap { position: relative; }
+    .select-wrap::after {
+      content: '\f107'; /* fa-angle-down */
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+      color: rgba(255,255,255,0.38); pointer-events: none; font-size: 14px;
+    }
+    .field-select { padding-right: 40px; cursor: pointer; }
+    .field-select option {
+      background: #1e293b; color: #f1f5f9;
+    }
+
+    /* Textarea */
+    .field-textarea {
+      resize: vertical;
+      min-height: 150px;
+      line-height: 1.6;
+    }
+
+    /* Field error message */
+    .field-error {
+      display: none;
+      font-size: 12px; font-weight: 500; color: #38bdf8;
+      margin-top: 6px;
+    }
+    .field-error.visible { display: block; }
+
+    /* Submit button */
+    .btn-submit {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; padding: 15px 24px; margin-top: 28px;
+      background: linear-gradient(135deg, #0ea5e9, #0369a1);
+      color: white; border: none; border-radius: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px; font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 8px 24px rgba(14,165,233,0.35);
+    }
+    .btn-submit:hover {
+      opacity: 0.92; transform: translateY(-1px);
+      box-shadow: 0 12px 32px rgba(14,165,233,0.5);
+    }
+    .btn-submit:active { transform: translateY(0); }
+    .btn-submit:disabled {
+      opacity: 0.6; cursor: not-allowed; transform: none;
+    }
+
+    /* Success message */
+    .success-message {
+      display: none;
+      background: rgba(34,197,94,0.08);
+      border: 1px solid rgba(34,197,94,0.28);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-top: 24px;
+      text-align: center;
+    }
+    .success-message.visible { display: block; }
+    .success-icon {
+      font-size: 24px; color: #22c55e; margin-bottom: 10px;
+    }
+    .success-title {
+      font-size: 15px; font-weight: 700; color: #f8fafc; margin-bottom: 6px;
+    }
+    .success-copy {
+      font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.55;
+    }
+
+    /* ============================================================
+       ALTERNATIVE CONTACT
+    ============================================================ */
+    .alt-contact {
+      background: #0b1628;
+      padding: 0 32px 80px;
+    }
+    .alt-contact-inner {
+      max-width: 600px; margin: 0 auto;
+    }
+    .alt-divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      margin-bottom: 48px;
+    }
+    .alt-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(20px, 2.4vw, 26px); font-weight: 700;
+      color: #f8fafc; margin-bottom: 12px; line-height: 1.2;
+    }
+    .alt-copy {
+      font-size: 15px; color: rgba(255,255,255,0.52); margin-bottom: 14px; line-height: 1.6;
+    }
+    .alt-email {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 16px; font-weight: 600; color: #38bdf8;
+      transition: color 0.2s, gap 0.2s;
+    }
+    .alt-email:hover { color: #7dd3fc; gap: 12px; }
+    .alt-note {
+      display: block; margin-top: 16px;
+      font-size: 13px; color: rgba(255,255,255,0.3); line-height: 1.5;
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    .footer {
+      background: #060d1a;
+      border-top: 1px solid rgba(56,189,248,0.07);
+      padding: 64px 32px 0;
+    }
+    .footer-main {
+      max-width: 1280px; margin: 0 auto;
+      display: grid; grid-template-columns: 2fr 1.5fr 1.5fr; gap: 56px;
+      padding-bottom: 48px;
+    }
+    .footer-brand { font-family: 'Inter', sans-serif; font-size: 24px; font-weight: 800; color: #38bdf8; letter-spacing: -0.5px; margin-bottom: 12px; }
+    .footer-tagline { font-size: 14px; color: rgba(255,255,255,0.38); line-height: 1.6; max-width: 230px; }
+    .footer-col-title { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.32); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 18px; }
+    .footer-list { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+    .footer-list a { font-size: 14px; color: rgba(255,255,255,0.48); transition: color 0.2s; }
+    .footer-list a:hover { color: #38bdf8; }
+    .footer-bottom {
+      max-width: 1280px; margin: 0 auto;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 20px 0;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-copy { font-size: 13px; color: rgba(255,255,255,0.28); }
+    .footer-legal { display: flex; gap: 20px; }
+    .footer-legal a { font-size: 13px; color: rgba(255,255,255,0.28); transition: color 0.2s; }
+    .footer-legal a:hover { color: #38bdf8; }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 960px) {
+      .footer-main { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .nav-links   { display: none; }
+      .nav-actions { display: none; }
+      .hamburger   { display: flex; }
+      .nav-inner   { padding: 0 20px; }
+      .page-hero   { padding: 100px 20px 28px; }
+      .page-hero-headline { font-size: 1.8rem; }
+      .contact-section { padding: 32px 20px 52px; }
+      .form-card   { padding: 32px 24px; }
+      .alt-contact { padding: 0 20px 64px; }
+      .footer-main { grid-template-columns: 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+      .footer-legal { flex-wrap: wrap; justify-content: center; }
+    }
+    @media (max-width: 480px) {
+      .form-card { padding: 28px 18px; }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ================================================================
+     NAVIGATION
+================================================================ -->
+<nav class="nav" id="mainNav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Casiflow</a>
+
+    <ul class="nav-links">
+      <li><a href="features.html">Features</a></li>
+      <li><a href="responsible-gambling.html">Responsible Gambling</a></li>
+      <li><a href="playbook.html">The Playbook</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <a href="https://app.casiflow.com/login"  class="btn-outline">Log In</a>
+      <a href="https://app.casiflow.com/signup" class="btn-teal">Sign Up</a>
+    </div>
+
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="features.html">Features</a>
+    <a href="responsible-gambling.html">Responsible Gambling</a>
+    <a href="playbook.html">The Playbook</a>
+    <a href="faq.html">FAQ</a>
+    <a href="about.html">About</a>
+    <a href="contact.html" class="active">Contact</a>
+    <div class="mobile-menu-actions">
+      <a href="https://app.casiflow.com/login"  class="btn-outline">Log In</a>
+      <a href="https://app.casiflow.com/signup" class="btn-teal">Sign Up Free</a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ================================================================
+     PAGE HERO
+================================================================ -->
+<section class="page-hero">
+  <div class="page-hero-inner fade-in">
+    <span class="section-label">Contact</span>
+    <h1 class="page-hero-headline">Get in touch.</h1>
+    <p class="page-hero-sub">Got a question, a suggestion or just want to say hello? We'd love to hear from you.</p>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     CONTACT FORM SECTION
+================================================================ -->
+<section class="contact-section">
+  <div class="contact-section-inner">
+    <div class="form-card fade-in">
+
+      <form id="contactForm" novalidate>
+
+        <!-- Name -->
+        <div class="field-group">
+          <label class="field-label" for="contactName">Your name</label>
+          <input
+            class="field-input" type="text" id="contactName" name="name"
+            placeholder="Your name" autocomplete="name"
+          />
+          <span class="field-error" id="nameError">Please enter your name.</span>
+        </div>
+
+        <!-- Email -->
+        <div class="field-group">
+          <label class="field-label" for="contactEmail">Email address</label>
+          <input
+            class="field-input" type="email" id="contactEmail" name="email"
+            placeholder="Your email address" autocomplete="email"
+          />
+          <span class="field-error" id="emailError">Please enter a valid email address.</span>
+        </div>
+
+        <!-- Subject -->
+        <div class="field-group">
+          <label class="field-label" for="contactSubject">Subject</label>
+          <div class="select-wrap">
+            <select class="field-select" id="contactSubject" name="subject">
+              <option value="" disabled selected>Select a subject</option>
+              <option value="general">General Enquiry</option>
+              <option value="technical">Technical Issue</option>
+              <option value="partnership">Partnership</option>
+              <option value="feedback">Feedback</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <span class="field-error" id="subjectError">Please select a subject.</span>
+        </div>
+
+        <!-- Message -->
+        <div class="field-group">
+          <label class="field-label" for="contactMessage">Message</label>
+          <textarea
+            class="field-textarea" id="contactMessage" name="message"
+            placeholder="Your message"
+          ></textarea>
+          <span class="field-error" id="messageError">Please enter your message.</span>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">
+          <i class="fa-solid fa-paper-plane"></i>
+          Send Message
+        </button>
+
+      </form>
+
+      <!-- Success state -->
+      <div class="success-message" id="successMessage">
+        <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
+        <p class="success-title">Message sent!</p>
+        <p class="success-copy">Thanks for your message. We'll get back to you within 48 hours.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     ALTERNATIVE CONTACT
+================================================================ -->
+<section class="alt-contact">
+  <div class="alt-contact-inner fade-in">
+    <hr class="alt-divider" />
+    <h2 class="alt-headline">Prefer to email directly?</h2>
+    <p class="alt-copy">You can also reach us at</p>
+    <a href="mailto:support@casiflow.com" class="alt-email">
+      support@casiflow.com
+      <i class="fa-solid fa-arrow-right" style="font-size:13px;"></i>
+    </a>
+    <span class="alt-note">We aim to respond to all enquiries within 48 hours.</span>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     FOOTER
+================================================================ -->
+<footer class="footer">
+  <div class="footer-main">
+    <div>
+      <div class="footer-brand">Casiflow</div>
+      <p class="footer-tagline">The house tracks everything. So should you.</p>
+    </div>
+
+    <div>
+      <p class="footer-col-title">Navigation</p>
+      <ul class="footer-list">
+        <li><a href="features.html">Features</a></li>
+        <li><a href="responsible-gambling.html">Responsible Gambling</a></li>
+        <li><a href="playbook.html">The Playbook</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="footer-col-title">Legal</p>
+      <ul class="footer-list">
+        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+        <li><a href="terms.html">Terms &amp; Conditions</a></li>
+        <li><a href="responsible-gambling.html">Responsible Gambling</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="partner.html">Partner with us</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2026 Casiflow. All rights reserved.</p>
+    <div class="footer-legal">
+      <a href="privacy-policy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ================================================================
+     JAVASCRIPT
+================================================================ -->
+<script>
+  /* --- Nav scroll shadow --- */
+  const nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+  }, { passive: true });
+
+  /* --- Hamburger menu --- */
+  const hamburger  = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  hamburger.addEventListener('click', () => {
+    const open = mobileMenu.classList.toggle('open');
+    hamburger.classList.toggle('open', open);
+    hamburger.setAttribute('aria-expanded', open);
+  });
+
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      hamburger.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  /* --- Scroll-triggered fade-in via IntersectionObserver --- */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  /* --- Contact form validation & success state --- */
+  const form          = document.getElementById('contactForm');
+  const successMsg    = document.getElementById('successMessage');
+  const submitBtn     = document.getElementById('submitBtn');
+
+  const nameInput     = document.getElementById('contactName');
+  const emailInput    = document.getElementById('contactEmail');
+  const subjectInput  = document.getElementById('contactSubject');
+  const messageInput  = document.getElementById('contactMessage');
+
+  const nameError     = document.getElementById('nameError');
+  const emailError    = document.getElementById('emailError');
+  const subjectError  = document.getElementById('subjectError');
+  const messageError  = document.getElementById('messageError');
+
+  function isValidEmail(val) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim());
+  }
+
+  function clearError(input, errorEl) {
+    input.classList.remove('error');
+    errorEl.classList.remove('visible');
+  }
+
+  function showError(input, errorEl) {
+    input.classList.add('error');
+    errorEl.classList.add('visible');
+  }
+
+  /* Clear errors on input */
+  nameInput.addEventListener('input',    () => clearError(nameInput,    nameError));
+  emailInput.addEventListener('input',   () => clearError(emailInput,   emailError));
+  subjectInput.addEventListener('change',() => clearError(subjectInput, subjectError));
+  messageInput.addEventListener('input', () => clearError(messageInput, messageError));
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    let valid = true;
+
+    if (!nameInput.value.trim()) {
+      showError(nameInput, nameError);
+      valid = false;
+    }
+    if (!isValidEmail(emailInput.value)) {
+      showError(emailInput, emailError);
+      valid = false;
+    }
+    if (!subjectInput.value) {
+      showError(subjectInput, subjectError);
+      valid = false;
+    }
+    if (!messageInput.value.trim()) {
+      showError(messageInput, messageError);
+      valid = false;
+    }
+
+    if (!valid) return;
+
+    /* All valid — show success */
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fa-solid fa-circle-check"></i> Sent!';
+
+    setTimeout(() => {
+      form.style.display = 'none';
+      successMsg.classList.add('visible');
+    }, 320);
+  });
+</script>
+
+</body>
+</html>

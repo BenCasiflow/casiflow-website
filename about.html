@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — Casiflow</title>
+  <meta name="description" content="Casiflow was built by a casino player who got tired of not knowing their real numbers. Here's the story, the mission and what we stand for." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #0f172a;
+      color: #e2e8f0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; }
+
+    /* ============================================================
+       SCROLL ANIMATIONS
+    ============================================================ */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+    .delay-1 { transition-delay: 0.10s; }
+    .delay-2 { transition-delay: 0.20s; }
+    .delay-3 { transition-delay: 0.30s; }
+    .delay-4 { transition-delay: 0.40s; }
+
+    /* ============================================================
+       NAVIGATION
+    ============================================================ */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(6,13,26,0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+    }
+    .nav.scrolled {
+      border-bottom-color: rgba(56,189,248,0.12);
+      box-shadow: 0 4px 32px rgba(0,0,0,0.45);
+      background: rgba(6,13,26,0.97);
+    }
+    .nav-inner {
+      max-width: 1280px; margin: 0 auto; padding: 0 32px;
+      height: 68px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Inter', sans-serif;
+      font-size: 22px; font-weight: 800; color: #38bdf8;
+      letter-spacing: -0.5px; flex-shrink: 0;
+    }
+    .nav-links {
+      display: flex; align-items: center; gap: 28px; list-style: none;
+    }
+    .nav-links a {
+      color: rgba(255,255,255,0.68); font-size: 14px; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: #38bdf8; }
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+
+    .btn-outline {
+      display: inline-block; padding: 8px 18px;
+      border: 1px solid rgba(56,189,248,0.4); border-radius: 8px;
+      color: #38bdf8; font-size: 14px; font-weight: 600;
+      background: transparent; cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .btn-outline:hover { background: rgba(56,189,248,0.08); border-color: #38bdf8; }
+
+    .btn-teal {
+      display: inline-block; padding: 9px 20px;
+      border: none; border-radius: 8px;
+      background: linear-gradient(135deg, #0ea5e9, #0369a1);
+      color: white; font-size: 14px; font-weight: 700; cursor: pointer;
+      transition: opacity 0.2s, box-shadow 0.2s, transform 0.2s;
+      box-shadow: 0 4px 12px rgba(14,165,233,0.3);
+    }
+    .btn-teal:hover {
+      opacity: 0.92; box-shadow: 0 6px 20px rgba(14,165,233,0.45);
+      transform: translateY(-1px);
+    }
+
+    /* Hamburger */
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 4px; background: none; border: none;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 2px; background: #e2e8f0;
+      border-radius: 2px; transition: all 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    /* Mobile menu */
+    .mobile-menu {
+      display: none; position: absolute; top: 68px; left: 0; right: 0;
+      background: rgba(6,13,26,0.98);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(56,189,248,0.1);
+      padding: 20px 28px 28px; flex-direction: column;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      display: block; padding: 13px 0; color: rgba(255,255,255,0.78);
+      font-size: 16px; font-weight: 500;
+      border-bottom: 1px solid rgba(255,255,255,0.06); transition: color 0.2s;
+    }
+    .mobile-menu a:last-of-type { border-bottom: none; }
+    .mobile-menu a:hover, .mobile-menu a.active { color: #38bdf8; }
+    .mobile-menu-actions { display: flex; gap: 12px; padding-top: 20px; }
+    .mobile-menu-actions .btn-outline,
+    .mobile-menu-actions .btn-teal { flex: 1; text-align: center; }
+
+    /* ============================================================
+       SECTION COMMON
+    ============================================================ */
+    .section { padding: 100px 32px; }
+    .section-inner { max-width: 1280px; margin: 0 auto; }
+    .section-label {
+      display: inline-block; font-size: 11px; font-weight: 700; color: #0ea5e9;
+      letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 14px;
+    }
+    .section-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 3.8vw, 44px); font-weight: 700;
+      color: #f8fafc; line-height: 1.15; margin-bottom: 0; letter-spacing: -0.5px;
+    }
+
+    /* ============================================================
+       PAGE HERO — compact inner page variant
+    ============================================================ */
+    .page-hero {
+      background: #0f172a;
+      padding: 112px 32px 36px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(14,165,233,0.07) 0%, transparent 65%);
+      z-index: 0;
+    }
+    .page-hero-inner {
+      position: relative; z-index: 1;
+      max-width: 700px; margin: 0 auto;
+    }
+    .page-hero .section-label { margin-bottom: 16px; }
+    .page-hero-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 2.2vw, 2.5rem);
+      font-weight: 900; color: #f8fafc; line-height: 1.12;
+      letter-spacing: -0.5px; margin-bottom: 16px;
+    }
+    .page-hero-sub {
+      font-size: 17px; color: rgba(255,255,255,0.58); line-height: 1.65;
+      max-width: 560px; margin: 0 auto;
+    }
+
+    /* ============================================================
+       STORY SECTION
+    ============================================================ */
+    .story { background: #0b1628; }
+    .story-inner { max-width: 800px; margin: 0 auto; }
+    .story-inner .section-headline { margin-bottom: 36px; }
+    .story-body p {
+      font-size: 17px; color: rgba(255,255,255,0.65); line-height: 1.8;
+      margin-bottom: 24px;
+    }
+    .story-body p:last-child { margin-bottom: 0; }
+
+    /* ============================================================
+       MISSION SECTION
+    ============================================================ */
+    .mission { background: #0f172a; }
+    .mission-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center;
+    }
+    .mission-text .section-headline { margin-bottom: 28px; }
+    .mission-text p {
+      font-size: 16px; color: rgba(255,255,255,0.58); line-height: 1.8; margin-bottom: 20px;
+    }
+    .mission-text p:last-child { margin-bottom: 0; }
+
+    /* Mission graphic card */
+    .mission-graphic {
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(56,189,248,0.18);
+      border-radius: 18px;
+      padding: 28px 24px;
+      box-shadow: 0 0 48px rgba(14,165,233,0.08), 0 20px 60px rgba(0,0,0,0.45);
+    }
+    .mg-compare {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px;
+    }
+    .mg-col {
+      background: rgba(30,41,59,0.55);
+      border-radius: 12px; padding: 16px 14px;
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+    .mg-col-title {
+      font-size: 10px; font-weight: 800; letter-spacing: 2px;
+      text-transform: uppercase; margin-bottom: 14px; display: block;
+    }
+    .mg-col-title.house  { color: #f87171; }
+    .mg-col-title.before { color: rgba(255,255,255,0.32); }
+    .mg-list { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .mg-list li {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.72);
+    }
+    .mg-list li .mg-icon { width: 16px; text-align: center; flex-shrink: 0; font-size: 11px; }
+    .mg-icon.check { color: #22c55e; }
+    .mg-icon.cross  { color: rgba(255,255,255,0.22); }
+
+    /* Divider row */
+    .mg-divider {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+    }
+    .mg-divider-line {
+      flex: 1; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(56,189,248,0.5), transparent);
+    }
+    .mg-divider-logo {
+      font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 800;
+      color: #38bdf8; letter-spacing: -0.3px; flex-shrink: 0;
+    }
+
+    /* After row */
+    .mg-after {
+      background: rgba(14,165,233,0.06);
+      border: 1px solid rgba(56,189,248,0.2);
+      border-radius: 12px; padding: 16px 14px;
+    }
+    .mg-after-title {
+      font-size: 10px; font-weight: 800; letter-spacing: 2px;
+      text-transform: uppercase; margin-bottom: 14px; display: block;
+      color: #38bdf8;
+    }
+    .mg-after-list {
+      list-style: none;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px;
+    }
+    .mg-after-list li {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.82);
+    }
+    .mg-after-list li .mg-icon { color: #38bdf8; font-size: 11px; }
+
+    /* ============================================================
+       VALUES SECTION
+    ============================================================ */
+    .values { background: #0b1628; }
+    .values-headline-row { margin-bottom: 52px; }
+    .values-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 22px;
+    }
+    .value-card {
+      background: rgba(30,41,59,0.55);
+      border: 1px solid rgba(56,189,248,0.09);
+      border-radius: 16px; padding: 36px 32px;
+      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    }
+    .value-card:hover {
+      border-color: rgba(56,189,248,0.30);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.30);
+    }
+    .value-icon {
+      width: 52px; height: 52px; border-radius: 12px;
+      background: rgba(14,165,233,0.10);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px; font-size: 22px; color: #38bdf8;
+    }
+    .value-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px; font-weight: 700; color: #f8fafc;
+      margin-bottom: 12px; line-height: 1.2;
+    }
+    .value-copy { font-size: 15px; color: rgba(255,255,255,0.52); line-height: 1.65; }
+
+    /* ============================================================
+       FINAL CTA
+    ============================================================ */
+    .final-cta { position: relative; background: #060d1a; overflow: hidden; }
+    .final-cta-glow {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 60%, rgba(14,165,233,0.09) 0%, transparent 70%);
+      z-index: 0;
+    }
+    .final-cta-inner {
+      position: relative; z-index: 1;
+      max-width: 700px; margin: 0 auto; text-align: center; padding: 120px 32px;
+    }
+    .final-cta-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(30px, 4.5vw, 52px); font-weight: 900;
+      color: #f8fafc; line-height: 1.1; margin-bottom: 20px; letter-spacing: -0.5px;
+    }
+    .final-cta-sub {
+      font-size: 18px; color: rgba(255,255,255,0.52); line-height: 1.65; margin-bottom: 48px;
+    }
+    .btn-cta-lg {
+      display: inline-flex; align-items: center; gap: 12px; padding: 20px 44px;
+      background: linear-gradient(135deg, #0ea5e9, #0369a1);
+      color: white; border-radius: 14px; font-size: 18px; font-weight: 700;
+      cursor: pointer; transition: all 0.25s;
+      box-shadow: 0 12px 36px rgba(14,165,233,0.40);
+    }
+    .btn-cta-lg:hover { transform: translateY(-3px); box-shadow: 0 20px 52px rgba(14,165,233,0.55); }
+    .cta-secondary {
+      display: block; margin-top: 20px;
+      font-size: 14px; color: rgba(255,255,255,0.40);
+    }
+    .cta-secondary a { color: #38bdf8; font-weight: 600; }
+    .cta-secondary a:hover { color: #7dd3fc; }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    .footer {
+      background: #060d1a;
+      border-top: 1px solid rgba(56,189,248,0.07);
+      padding: 64px 32px 0;
+    }
+    .footer-main {
+      max-width: 1280px; margin: 0 auto;
+      display: grid; grid-template-columns: 2fr 1.5fr 1.5fr; gap: 56px;
+      padding-bottom: 48px;
+    }
+    .footer-brand { font-family: 'Inter', sans-serif; font-size: 24px; font-weight: 800; color: #38bdf8; letter-spacing: -0.5px; margin-bottom: 12px; }
+    .footer-tagline { font-size: 14px; color: rgba(255,255,255,0.38); line-height: 1.6; max-width: 230px; }
+    .footer-col-title { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.32); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 18px; }
+    .footer-list { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+    .footer-list a { font-size: 14px; color: rgba(255,255,255,0.48); transition: color 0.2s; }
+    .footer-list a:hover { color: #38bdf8; }
+    .footer-bottom {
+      max-width: 1280px; margin: 0 auto;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 20px 0;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-copy { font-size: 13px; color: rgba(255,255,255,0.28); }
+    .footer-legal { display: flex; gap: 20px; }
+    .footer-legal a { font-size: 13px; color: rgba(255,255,255,0.28); transition: color 0.2s; }
+    .footer-legal a:hover { color: #38bdf8; }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 960px) {
+      .mission-grid { grid-template-columns: 1fr; gap: 48px; }
+      .footer-main  { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .nav-links   { display: none; }
+      .nav-actions { display: none; }
+      .hamburger   { display: flex; }
+      .nav-inner   { padding: 0 20px; }
+      .section     { padding: 72px 20px; }
+      .page-hero   { padding: 100px 20px 28px; }
+      .page-hero-headline { font-size: 1.8rem; }
+      .values-grid { grid-template-columns: 1fr; }
+      .footer-main { grid-template-columns: 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+      .footer-legal { flex-wrap: wrap; justify-content: center; }
+      .final-cta-inner { padding: 80px 20px; }
+      .mg-after-list { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .mg-compare { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ================================================================
+     NAVIGATION
+================================================================ -->
+<nav class="nav" id="mainNav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Casiflow</a>
+
+    <ul class="nav-links">
+      <li><a href="features.html">Features</a></li>
+      <li><a href="responsible-gambling.html">Responsible Gambling</a></li>
+      <li><a href="playbook.html">The Playbook</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="about.html" class="active">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <a href="https://app.casiflow.com/login"  class="btn-outline">Log In</a>
+      <a href="https://app.casiflow.com/signup" class="btn-teal">Sign Up</a>
+    </div>
+
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="features.html">Features</a>
+    <a href="responsible-gambling.html">Responsible Gambling</a>
+    <a href="playbook.html">The Playbook</a>
+    <a href="faq.html">FAQ</a>
+    <a href="about.html" class="active">About</a>
+    <a href="contact.html">Contact</a>
+    <div class="mobile-menu-actions">
+      <a href="https://app.casiflow.com/login"  class="btn-outline">Log In</a>
+      <a href="https://app.casiflow.com/signup" class="btn-teal">Sign Up Free</a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ================================================================
+     PAGE HERO
+================================================================ -->
+<section class="page-hero">
+  <div class="page-hero-inner fade-in">
+    <span class="section-label">About</span>
+    <h1 class="page-hero-headline">Built by a player, for players.</h1>
+    <p class="page-hero-sub">Casiflow exists because the tools players actually need didn't exist. So we built them.</p>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     THE STORY
+================================================================ -->
+<section class="section story">
+  <div class="section-inner">
+    <div class="story-inner fade-in">
+      <span class="section-label">Our Story</span>
+      <h2 class="section-headline">It started with a simple question.</h2>
+      <div class="story-body" style="margin-top: 36px;">
+        <p>There's nothing quite like the feeling of a good session. The rush of a big win, the satisfaction of walking away up, the anticipation of the next time you play. If you're a casino player, you know exactly what that feels like.</p>
+        <p>But here's the thing nobody talks about — most players have no idea whether they're actually winning. Not really. They remember the good sessions and forget the bad ones. They know they deposited last week but can't remember how much. They have accounts at four different casinos and couldn't tell you their combined position if their life depended on it.</p>
+        <p>I was one of those players. I tried spreadsheets, notes on my phone, everything. Nothing gave me the honest, combined truth across every platform. So I built Casiflow — a tool that tells you exactly where you stand, across every casino you play at, all in one place. Because every serious player deserves to know their real numbers.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     THE MISSION
+================================================================ -->
+<section class="section mission">
+  <div class="section-inner">
+    <div class="mission-grid">
+
+      <!-- Text -->
+      <div class="mission-text fade-in">
+        <span class="section-label">Our Mission</span>
+        <h2 class="section-headline">Level the playing field.</h2>
+        <p>The house has always had the data advantage. Casinos know exactly how much you've deposited, how much you've withdrawn and what your lifetime net position is. They use that data to understand you better than you understand yourself.</p>
+        <p>Casiflow changes that. We give you the same clarity the house has always had — your real numbers, across every casino, in one place. Not to stop you playing. Not to lecture you. But because a player who knows their numbers is a smarter, sharper, more in control player. And that's exactly what you deserve to be.</p>
+      </div>
+
+      <!-- Graphic -->
+      <div class="mission-graphic fade-in delay-2">
+
+        <!-- House vs You (Before) -->
+        <div class="mg-compare">
+          <div class="mg-col">
+            <span class="mg-col-title house">The House</span>
+            <ul class="mg-list">
+              <li><i class="fa-solid fa-check mg-icon check"></i> Total Deposits</li>
+              <li><i class="fa-solid fa-check mg-icon check"></i> Total Withdrawals</li>
+              <li><i class="fa-solid fa-check mg-icon check"></i> Net Position</li>
+              <li><i class="fa-solid fa-check mg-icon check"></i> Lifetime Value</li>
+              <li><i class="fa-solid fa-check mg-icon check"></i> Session History</li>
+            </ul>
+          </div>
+          <div class="mg-col">
+            <span class="mg-col-title before">You (Before)</span>
+            <ul class="mg-list">
+              <li><i class="fa-solid fa-xmark mg-icon cross"></i> Total Deposits</li>
+              <li><i class="fa-solid fa-xmark mg-icon cross"></i> Total Withdrawals</li>
+              <li><i class="fa-solid fa-xmark mg-icon cross"></i> Net Position</li>
+              <li><i class="fa-solid fa-xmark mg-icon cross"></i> Lifetime Value</li>
+              <li><i class="fa-solid fa-xmark mg-icon cross"></i> Session History</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Divider with logo -->
+        <div class="mg-divider">
+          <div class="mg-divider-line"></div>
+          <span class="mg-divider-logo">Casiflow</span>
+          <div class="mg-divider-line"></div>
+        </div>
+
+        <!-- You (After) -->
+        <div class="mg-after">
+          <span class="mg-after-title">You (With Casiflow)</span>
+          <ul class="mg-after-list">
+            <li><i class="fa-solid fa-check mg-icon"></i> Total Deposits</li>
+            <li><i class="fa-solid fa-check mg-icon"></i> Total Withdrawals</li>
+            <li><i class="fa-solid fa-check mg-icon"></i> Net Position</li>
+            <li><i class="fa-solid fa-check mg-icon"></i> Lifetime Value</li>
+            <li><i class="fa-solid fa-check mg-icon"></i> Session History</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     THE VALUES
+================================================================ -->
+<section class="section values">
+  <div class="section-inner">
+    <div class="values-headline-row fade-in">
+      <span class="section-label">Our Values</span>
+      <h2 class="section-headline">What we stand for.</h2>
+    </div>
+
+    <div class="values-grid">
+
+      <div class="value-card fade-in delay-1">
+        <div class="value-icon"><i class="fa-solid fa-user"></i></div>
+        <h3 class="value-title">Player first</h3>
+        <p class="value-copy">Every decision we make starts with one question: does this make things better or easier for the player? Not for casinos, not for advertisers. For you.</p>
+      </div>
+
+      <div class="value-card fade-in delay-2">
+        <div class="value-icon"><i class="fa-solid fa-eye"></i></div>
+        <h3 class="value-title">Radical transparency</h3>
+        <p class="value-copy">We show you the truth about your gambling even when it's uncomfortable. No sugar-coating, no hiding numbers. Just honest data that puts you in control.</p>
+      </div>
+
+      <div class="value-card fade-in delay-3">
+        <div class="value-icon"><i class="fa-solid fa-heart"></i></div>
+        <h3 class="value-title">It's free!</h3>
+        <p class="value-copy">Casiflow is free to use. That's a commitment, not a marketing line.</p>
+      </div>
+
+      <div class="value-card fade-in delay-4">
+        <div class="value-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <h3 class="value-title">We respect your choices</h3>
+        <p class="value-copy">We're not here to tell you how to gamble or whether you should. We're here to make sure that whatever you choose to do, you do it with full information.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     FINAL CTA
+================================================================ -->
+<section class="final-cta">
+  <div class="final-cta-glow"></div>
+  <div class="final-cta-inner fade-in">
+    <h2 class="final-cta-headline">See what Casiflow can do for you.</h2>
+    <p class="final-cta-sub">Join for free and get the full picture across every casino you play at.</p>
+    <a href="https://app.casiflow.com/signup" class="btn-cta-lg">
+      <i class="fa-solid fa-arrow-right"></i>
+      Create My Free Account
+    </a>
+    <p class="cta-secondary">Already have an account? <a href="https://app.casiflow.com/login">Log in</a></p>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     FOOTER
+================================================================ -->
+<footer class="footer">
+  <div class="footer-main">
+    <div>
+      <div class="footer-brand">Casiflow</div>
+      <p class="footer-tagline">The house tracks everything. So should you.</p>
+    </div>
+
+    <div>
+      <p class="footer-col-title">Navigation</p>
+      <ul class="footer-list">
+        <li><a href="features.html">Features</a></li>
+        <li><a href="responsible-gambling.html">Responsible Gambling</a></li>
+        <li><a href="playbook.html">The Playbook</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="footer-col-title">Legal</p>
+      <ul class="footer-list">
+        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+        <li><a href="terms.html">Terms &amp; Conditions</a></li>
+        <li><a href="responsible-gambling.html">Responsible Gambling</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="partner.html">Partner with us</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2026 Casiflow. All rights reserved.</p>
+    <div class="footer-legal">
+      <a href="privacy-policy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ================================================================
+     JAVASCRIPT
+================================================================ -->
+<script>
+  /* --- Nav scroll shadow --- */
+  const nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+  }, { passive: true });
+
+  /* --- Hamburger menu --- */
+  const hamburger  = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  hamburger.addEventListener('click', () => {
+    const open = mobileMenu.classList.toggle('open');
+    hamburger.classList.toggle('open', open);
+    hamburger.setAttribute('aria-expanded', open);
+  });
+
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      hamburger.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  /* --- Scroll-triggered fade-in via IntersectionObserver --- */
+  const fadeEls = document.querySelectorAll('.fade-in');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+  fadeEls.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

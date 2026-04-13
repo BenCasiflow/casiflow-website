@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Features — Casiflow</title>
+  <meta name="description" content="Every tool you need to play smarter. See everything Casiflow can do for you." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #0f172a;
+      color: #e2e8f0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; }
+
+    /* ============================================================
+       SCROLL ANIMATIONS
+    ============================================================ */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+    .delay-1 { transition-delay: 0.10s; }
+    .delay-2 { transition-delay: 0.20s; }
+    .delay-3 { transition-delay: 0.30s; }
+    .delay-4 { transition-delay: 0.40s; }
+
+    /* ============================================================
+       NAVIGATION — identical to index.html
+    ============================================================ */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(6,13,26,0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+    }
+    .nav.scrolled {
+      border-bottom-color: rgba(56,189,248,0.12);
+      box-shadow: 0 4px 32px rgba(0,0,0,0.45);
+      background: rgba(6,13,26,0.97);
+    }
+    .nav-inner {
+      max-width: 1280px; margin: 0 auto; padding: 0 32px;
+      height: 68px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Inter', sans-serif;
+      font-size: 22px; font-weight: 800; color: #38bdf8;
+      letter-spacing: -0.5px; flex-shrink: 0;
+    }
+    .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+    .nav-links a {
+      color: rgba(255,255,255,0.68); font-size: 14px; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #38bdf8; }
+    .nav-links a.active { color: #38bdf8; }
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+    .btn-outline {
+      display: inline-block; padding: 8px 18px;
+      border: 1px solid rgba(56,189,248,0.4); border-radius: 8px;
+      color: #38bdf8; font-size: 14px; font-weight: 600;
+      background: transparent; cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .btn-outline:hover { background: rgba(56,189,248,0.08); border-color: #38bdf8; }
+    .btn-teal {
+      display: inline-block; padding: 9px 20px;
+      border: none; border-radius: 8px;
+      background: linear-gradient(135deg, #0ea5e9, #0369a1);
+      color: white; font-size: 14px; font-weight: 700; cursor: pointer;
+      transition: opacity 0.2s, box-shadow 0.2s, transform 0.2s;
+      box-shadow: 0 4px 12px rgba(14,165,233,0.3);
+    }
+    .btn-teal:hover {
+      opacity: 0.92; box-shadow: 0 6px 20px rgba(14,165,233,0.45);
+      transform: translateY(-1px);
+    }
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 4px; background: none; border: none;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 2px; background: #e2e8f0;
+      border-radius: 2px; transition: all 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+    .mobile-menu {
+      display: none; position: absolute; top: 68px; left: 0; right: 0;
+      background: rgba(6,13,26,0.98);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(56,189,248,0.1);
+      padding: 20px 28px 28px; flex-direction: column;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      display: block; padding: 13px 0; color: rgba(255,255,255,0.78);
+      font-size: 16px; font-weight: 500;
+      border-bottom: 1px solid rgba(255,255,255,0.06); transition: color 0.2s;
+    }
+    .mobile-menu a:last-of-type { border-bottom: none; }
+    .mobile-menu a:hover { color: #38bdf8; }
+    .mobile-menu-actions { display: flex; gap: 12px; padding-top: 20px; }
+    .mobile-menu-actions .btn-outline,
+    .mobile-menu-actions .btn-teal { flex: 1; text-align: center; }
+
+    /* ============================================================
+       PAGE HERO
+    ============================================================ */
+    .page-hero {
+      background: #0f172a;
+      padding: 112px 32px 36px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 100%, rgba(14,165,233,0.07) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .page-hero-label {
+      display: inline-block; font-size: 11px; font-weight: 700; color: #0ea5e9;
+      letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 20px;
+    }
+    .page-hero-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 2.2vw, 2.5rem); font-weight: 900;
+      color: #f8fafc; line-height: 1.14; letter-spacing: -0.3px;
+      margin-bottom: 16px; max-width: 640px; margin-left: auto; margin-right: auto;
+    }
+    .page-hero-sub {
+      font-size: 18px; color: rgba(255,255,255,0.58); line-height: 1.7;
+      max-width: 560px; margin: 0 auto;
+    }
+
+    /* ============================================================
+       FEATURE BLOCKS
+    ============================================================ */
+    .feat-block {
+      padding: 96px 32px;
+    }
+    .feat-block:nth-child(odd)  { background: #0f172a; }
+    .feat-block:nth-child(even) { background: #0b1628; }
+
+    .feat-inner {
+      max-width: 1160px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+    }
+
+    /* Even blocks: visual left, content right — swap order */
+    .feat-block.even .feat-visual { order: -1; }
+    .feat-block.even .feat-content { order: 1; }
+
+    /* Content side */
+    .feat-label {
+      display: inline-block; font-size: 10.5px; font-weight: 700; color: #0ea5e9;
+      letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 14px;
+    }
+    .feat-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(26px, 3vw, 38px); font-weight: 700;
+      color: #f8fafc; line-height: 1.15; margin-bottom: 20px; letter-spacing: -0.5px;
+    }
+    .feat-copy {
+      font-size: 16px; color: rgba(255,255,255,0.55); line-height: 1.8;
+      margin-bottom: 28px;
+    }
+    .feat-accent {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 14px; font-weight: 600; color: #38bdf8;
+    }
+    .feat-accent i { font-size: 12px; transition: transform 0.2s; }
+    .feat-accent:hover i { transform: translateX(4px); }
+
+    /* Visual side — shared card shell */
+    .feat-visual {
+      display: flex; align-items: center; justify-content: center;
+    }
+    .fv-card {
+      background: #0f172a;
+      border: 1px solid rgba(56,189,248,0.15);
+      border-radius: 16px;
+      padding: 24px;
+      width: 100%; max-width: 420px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.55), 0 0 0 1px rgba(56,189,248,0.1);
+      font-family: 'Inter', sans-serif;
+    }
+    .fv-card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 18px; padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .fv-card-title {
+      font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.9);
+    }
+    .fv-card-badge {
+      font-size: 10px; font-weight: 600; color: #38bdf8;
+      background: rgba(56,189,248,0.1); border: 1px solid rgba(56,189,248,0.2);
+      padding: 3px 10px; border-radius: 100px;
+    }
+
+    /* ---- Feature 1: Casino list ---- */
+    .fv-casino-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 12px; border-radius: 9px; margin-bottom: 6px;
+      background: rgba(30,41,59,0.6); border: 1px solid rgba(255,255,255,0.05);
+      transition: border-color 0.2s;
+    }
+    .fv-casino-row:last-of-type { margin-bottom: 0; }
+    .fv-casino-left { display: flex; align-items: center; gap: 10px; }
+    .fv-casino-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    }
+    .fv-casino-name { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.82); }
+    .fv-casino-meta { font-size: 10.5px; color: rgba(255,255,255,0.35); margin-top: 1px; }
+    .fv-casino-bal  { font-size: 13px; font-weight: 700; }
+    .fv-casino-bal.pos { color: #22c55e; }
+    .fv-casino-bal.neu { color: rgba(255,255,255,0.6); }
+    .fv-divider { height: 1px; background: rgba(255,255,255,0.06); margin: 14px 0; }
+    .fv-total-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2px;
+    }
+    .fv-total-label { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; }
+    .fv-total-val   { font-size: 18px; font-weight: 800; color: #22c55e; }
+
+    /* ---- Feature 2: Net Result hero card ---- */
+    .fv-net-wrap {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 12px 0 8px;
+    }
+    .fv-net-label {
+      font-size: 10.5px; font-weight: 700; color: rgba(255,255,255,0.38);
+      text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px;
+    }
+    .fv-net-amount {
+      font-family: 'Playfair Display', serif;
+      font-size: 64px; font-weight: 900; color: #22c55e;
+      line-height: 1; letter-spacing: -2px; margin-bottom: 12px;
+    }
+    .fv-net-arrow {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 600; color: rgba(34,197,94,0.8);
+    }
+    .fv-net-sub {
+      margin-top: 20px; padding-top: 18px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%;
+    }
+    .fv-net-sub-item { text-align: center; }
+    .fv-net-sub-lbl  { font-size: 9.5px; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .fv-net-sub-val  { font-size: 15px; font-weight: 700; color: rgba(255,255,255,0.75); }
+
+    /* ---- Feature 3: Transaction list ---- */
+    .fv-tx-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 9px 12px; border-radius: 8px; margin-bottom: 5px;
+      background: rgba(30,41,59,0.55); border: 1px solid rgba(255,255,255,0.04);
+    }
+    .fv-tx-left  { display: flex; align-items: center; gap: 10px; }
+    .fv-tx-icon  {
+      width: 30px; height: 30px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; flex-shrink: 0;
+    }
+    .fv-tx-icon.dep  { background: rgba(56,189,248,0.12); color: #38bdf8; }
+    .fv-tx-icon.with { background: rgba(34,197,94,0.12);  color: #22c55e; }
+    .fv-tx-name { font-size: 12.5px; font-weight: 600; color: rgba(255,255,255,0.8); }
+    .fv-tx-date { font-size: 10px; color: rgba(255,255,255,0.32); margin-top: 1px; }
+    .fv-tx-amount { font-size: 13px; font-weight: 700; }
+    .fv-tx-amount.dep  { color: #38bdf8; }
+    .fv-tx-amount.with { color: #22c55e; }
+    .fv-tx-type {
+      font-size: 9px; font-weight: 600; text-transform: uppercase;
+      padding: 2px 7px; border-radius: 4px; margin-left: 6px;
+    }
+    .fv-tx-type.dep  { background: rgba(56,189,248,0.12); color: #38bdf8; }
+    .fv-tx-type.with { background: rgba(34,197,94,0.12);  color: #22c55e; }
+
+    /* ---- Feature 4: Progress bars ---- */
+    .fv-limit-block { margin-bottom: 18px; }
+    .fv-limit-block:last-child { margin-bottom: 0; }
+    .fv-limit-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .fv-limit-name { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.75); }
+    .fv-limit-vals { font-size: 11px; color: rgba(255,255,255,0.38); }
+    .fv-limit-vals span { color: rgba(255,255,255,0.65); font-weight: 600; }
+    .fv-bar-track {
+      height: 8px; background: rgba(255,255,255,0.07); border-radius: 100px; overflow: hidden;
+    }
+    .fv-bar-fill {
+      height: 100%; border-radius: 100px;
+      transition: width 0.6s ease;
+    }
+    .fv-bar-fill.warn { background: linear-gradient(90deg, #0ea5e9, #f59e0b); }
+    .fv-bar-fill.safe { background: linear-gradient(90deg, #0ea5e9, #22c55e); }
+    .fv-limit-note {
+      font-size: 10.5px; color: rgba(255,255,255,0.3); margin-top: 6px;
+    }
+    .fv-limit-note .hi { color: #f59e0b; font-weight: 600; }
+    .fv-limit-note .lo { color: #22c55e; font-weight: 600; }
+
+    /* ---- Feature 5: Circular goal progress ---- */
+    .fv-goal-wrap {
+      display: flex; flex-direction: column; align-items: center; padding: 8px 0 4px;
+    }
+    .fv-goal-ring-wrap {
+      position: relative; width: 140px; height: 140px; margin-bottom: 20px;
+    }
+    .fv-goal-ring-wrap svg { transform: rotate(-90deg); }
+    .fv-ring-track { fill: none; stroke: rgba(255,255,255,0.07); stroke-width: 10; }
+    .fv-ring-fill  {
+      fill: none; stroke: #38bdf8; stroke-width: 10;
+      stroke-linecap: round;
+      stroke-dasharray: 231 108; /* 68% of circumference ~339 */
+      transition: stroke-dasharray 1s ease;
+    }
+    .fv-ring-center {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .fv-ring-pct   { font-size: 26px; font-weight: 800; color: #38bdf8; line-height: 1; }
+    .fv-ring-sublbl { font-size: 10px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+    .fv-goal-name  { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.85); margin-bottom: 6px; }
+    .fv-goal-sub   { font-size: 12px; color: rgba(255,255,255,0.4); }
+    .fv-goal-sub strong { color: #38bdf8; }
+    .fv-goal-meta  {
+      margin-top: 20px; padding-top: 18px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%;
+    }
+    .fv-goal-meta-item { text-align: center; }
+    .fv-goal-meta-lbl  { font-size: 9.5px; color: rgba(255,255,255,0.32); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
+    .fv-goal-meta-val  { font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.75); }
+
+    /* ---- Feature 6: Monthly summary ---- */
+    .fv-month-label {
+      font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.38);
+      text-transform: uppercase; letter-spacing: 2px; margin-bottom: 4px;
+    }
+    .fv-month-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; font-weight: 700; color: #f8fafc; margin-bottom: 18px;
+    }
+    .fv-summary-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    }
+    .fv-summary-cell {
+      background: rgba(30,41,59,0.6); border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 10px; padding: 13px 14px;
+    }
+    .fv-summary-cell-label { font-size: 9.5px; font-weight: 500; color: rgba(255,255,255,0.38); text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 5px; }
+    .fv-summary-cell-val   { font-size: 18px; font-weight: 800; color: rgba(255,255,255,0.88); }
+    .fv-summary-cell-val.green { color: #22c55e; }
+    .fv-summary-cell-val.teal  { color: #38bdf8; }
+
+    /* ============================================================
+       FINAL CTA — identical to index.html
+    ============================================================ */
+    .final-cta { position: relative; background: #060d1a; overflow: hidden; }
+    .final-cta-glow {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 60%, rgba(14,165,233,0.09) 0%, transparent 70%);
+      z-index: 0;
+    }
+    .final-cta-inner {
+      position: relative; z-index: 1;
+      max-width: 700px; margin: 0 auto; text-align: center; padding: 120px 32px;
+    }
+    .final-cta-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 4vw, 48px); font-weight: 900;
+      color: #f8fafc; line-height: 1.1; margin-bottom: 20px; letter-spacing: -0.5px;
+    }
+    .final-cta-sub {
+      font-size: 18px; color: rgba(255,255,255,0.52); line-height: 1.65; margin-bottom: 44px;
+    }
+    .btn-cta-lg {
+      display: inline-flex; align-items: center; gap: 12px; padding: 20px 44px;
+      background: linear-gradient(135deg, #0ea5e9, #0369a1);
+      color: white; border-radius: 14px; font-size: 18px; font-weight: 700;
+      cursor: pointer; transition: all 0.25s;
+      box-shadow: 0 12px 36px rgba(14,165,233,0.40);
+    }
+    .btn-cta-lg:hover { transform: translateY(-3px); box-shadow: 0 20px 52px rgba(14,165,233,0.55); }
+    .cta-login-link { margin-top: 20px; font-size: 14px; color: rgba(255,255,255,0.45); }
+    .cta-login-link a {
+      color: #38bdf8; font-weight: 600;
+      text-decoration: underline; text-decoration-color: rgba(56,189,248,0.35);
+    }
+    .cta-login-link a:hover { color: #7dd3fc; }
+
+    /* ============================================================
+       FOOTER — identical to index.html
+    ============================================================ */
+    .footer {
+      background: #060d1a;
+      border-top: 1px solid rgba(56,189,248,0.07);
+      padding: 64px 32px 0;
+    }
+    .footer-main {
+      max-width: 1280px; margin: 0 auto;
+      display: grid; grid-template-columns: 2fr 1.5fr 1.5fr; gap: 56px;
+      padding-bottom: 48px;
+    }
+    .footer-brand { font-family: 'Inter', sans-serif; font-size: 24px; font-weight: 800; color: #38bdf8; letter-spacing: -0.5px; margin-bottom: 12px; }
+    .footer-tagline { font-size: 14px; color: rgba(255,255,255,0.38); line-height: 1.6; max-width: 230px; }
+    .footer-col-title { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.32); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 18px; }
+    .footer-list { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+    .footer-list a { font-size: 14px; color: rgba(255,255,255,0.48); transition: color 0.2s; }
+    .footer-list a:hover { color: #38bdf8; }
+    .footer-bottom {
+      max-width: 1280px; margin: 0 auto;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 20px 0;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-copy { font-size: 13px; color: rgba(255,255,255,0.28); }
+    .footer-legal { display: flex; gap: 20px; }
+    .footer-legal a { font-size: 13px; color: rgba(255,255,255,0.28); transition: color 0.2s; }
+    .footer-legal a:hover { color: #38bdf8; }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 960px) {
+      .feat-inner { grid-template-columns: 1fr; gap: 52px; }
+      /* On mobile: visual always on top, content below */
+      .feat-block.even .feat-visual { order: 0; }
+      .feat-block.even .feat-content { order: 1; }
+      .feat-visual { order: 0; }
+      .feat-content { order: 1; }
+      .fv-card { max-width: 100%; }
+      .footer-main { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .nav-links   { display: none; }
+      .nav-actions { display: none; }
+      .hamburger   { display: flex; }
+      .nav-inner   { padding: 0 20px; }
+      .page-hero   { padding: 100px 20px 28px; }
+      .feat-block  { padding: 72px 20px; }
+      .footer-main { grid-template-columns: 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+      .footer-legal  { flex-wrap: wrap; justify-content: center; }
+      .final-cta-inner { padding: 80px 20px; }
+      .fv-net-amount { font-size: 52px; }
+    }
+    @media (max-width: 480px) {
+      .page-hero-headline { font-size: 1.8rem; }
+      .feat-title { font-size: 26px; }
+      .fv-summary-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ================================================================
+     NAVIGATION
+================================================================ -->
+<nav class="nav" id="mainNav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Casiflow</a>
+
+    <ul class="nav-links">
+      <li><a href="features.html" class="active">Features</a></li>
+      <li><a href="responsible-gambling.html">Responsible Gambling</a></li>
+      <li><a href="playbook.html">The Playbook</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <a href="https://app.casiflow.com/login"  class="btn-outline">Log In</a>
+      <a href="https://app.casiflow.com/signup" class="btn-teal">Sign Up</a>
+    </div>
+
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="features.html">Features</a>
+    <a href="responsible-gambling.html">Responsible Gambling</a>
+    <a href="playbook.html">The Playbook</a>
+    <a href="faq.html">FAQ</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <div class="mobile-menu-actions">
+      <a href="https://app.casiflow.com/login"  class="btn-outline">Log In</a>
+      <a href="https://app.casiflow.com/signup" class="btn-teal">Sign Up Free</a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ================================================================
+     PAGE HERO
+================================================================ -->
+<section class="page-hero">
+  <div class="fade-in">
+    <span class="page-hero-label">Features</span>
+    <h1 class="page-hero-headline">Every tool you need to play smarter.</h1>
+    <p class="page-hero-sub">Casiflow gives you complete visibility over your gambling — across every casino, all in one place.</p>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     FEATURE 1 — One dashboard, every casino
+     ODD: content left, visual right
+================================================================ -->
+<section class="feat-block odd">
+  <div class="feat-inner">
+
+    <div class="feat-content fade-in">
+      <span class="feat-label">Core Feature</span>
+      <h2 class="feat-title">One dashboard, every casino</h2>
+      <p class="feat-copy">Most players have accounts at three, four, five different casinos. Keeping track of where your money is, what you've deposited and what you've withdrawn becomes impossible. Casiflow pulls everything into one unified dashboard. See exactly where you stand against each casino individually — and your total position across all of them combined. One login. Full picture.</p>
+      <span class="feat-accent">Get the full picture <i class="fa-solid fa-arrow-right"></i></span>
+    </div>
+
+    <div class="feat-visual fade-in delay-2">
+      <div class="fv-card">
+        <div class="fv-card-header">
+          <span class="fv-card-title">Your Casinos</span>
+          <span class="fv-card-badge">4 active</span>
+        </div>
+
+        <div class="fv-casino-row">
+          <div class="fv-casino-left">
+            <div class="fv-casino-dot" style="background:#38bdf8;"></div>
+            <div>
+              <div class="fv-casino-name">Betway</div>
+              <div class="fv-casino-meta">Last session: 2 days ago</div>
+            </div>
+          </div>
+          <div class="fv-casino-bal pos">+€320</div>
+        </div>
+
+        <div class="fv-casino-row">
+          <div class="fv-casino-left">
+            <div class="fv-casino-dot" style="background:#22c55e;"></div>
+            <div>
+              <div class="fv-casino-name">LeoVegas</div>
+              <div class="fv-casino-meta">Last session: 5 days ago</div>
+            </div>
+          </div>
+          <div class="fv-casino-bal pos">+€215</div>
+        </div>
+
+        <div class="fv-casino-row">
+          <div class="fv-casino-left">
+            <div class="fv-casino-dot" style="background:#8b5cf6;"></div>
+            <div>
+              <div class="fv-casino-name">Unibet</div>
+              <div class="fv-casino-meta">Last session: 1 week ago</div>
+            </div>
+          </div>
+          <div class="fv-casino-bal pos">+€115</div>
+        </div>
+
+        <div class="fv-casino-row">
+          <div class="fv-casino-left">
+            <div class="fv-casino-dot" style="background:#f59e0b;"></div>
+            <div>
+              <div class="fv-casino-name">PokerStars</div>
+              <div class="fv-casino-meta">Last session: 2 weeks ago</div>
+            </div>
+          </div>
+          <div class="fv-casino-bal neu">€0</div>
+        </div>
+
+        <div class="fv-divider"></div>
+
+        <div class="fv-total-row">
+          <span class="fv-total-label">Total Net Result</span>
+          <span class="fv-total-val">+€650</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ================================================================
+     FEATURE 2 — Know your real net result
+     EVEN: visual left, content right
+================================================================ -->
+<section class="feat-block even">
+  <div class="feat-inner">
+
+    <div class="feat-content fade-in">
+      <span class="feat-label">Clarity</span>
+      <h2 class="feat-title">Know your real net result</h2>
+      <p class="feat-copy">Ask any gambler if they're up or down and most will give you a guess. The truth is most players have no idea. Casiflow calculates your exact net result across every casino combined — total deposited minus total withdrawn. No guessing, no rounding, no wishful thinking. Just your real number.</p>
+      <span class="feat-accent">See your real number <i class="fa-solid fa-arrow-right"></i></span>
+    </div>
+
+    <div class="feat-visual fade-in delay-2">
+      <div class="fv-card">
+        <div class="fv-card-header">
+          <span class="fv-card-title">Net Result</span>
+          <span class="fv-card-badge">All time</span>
+        </div>
+
+        <div class="fv-net-wrap">
+          <div class="fv-net-label">Your net result</div>
+          <div class="fv-net-amount">+€650</div>
+          <div class="fv-net-arrow">
+            <i class="fa-solid fa-arrow-trend-up"></i>
+            You're up across all casinos
+          </div>
+        </div>
+
+        <div class="fv-net-sub">
+          <div class="fv-net-sub-item">
+            <div class="fv-net-sub-lbl">Total Deposited</div>
+            <div class="fv-net-sub-val">€2,450</div>
+          </div>
+          <div class="fv-net-sub-item">
+            <div class="fv-net-sub-lbl">Total Withdrawn</div>
+            <div class="fv-net-sub-val">€3,100</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ================================================================
+     FEATURE 3 — Track deposits, withdrawals and balances
+     ODD: content left, visual right
+================================================================ -->
+<section class="feat-block odd">
+  <div class="feat-inner">
+
+    <div class="feat-content fade-in">
+      <span class="feat-label">Tracking</span>
+      <h2 class="feat-title">Track deposits, withdrawals and balances</h2>
+      <p class="feat-copy">Every deposit you make, every withdrawal you request, every balance sitting in every casino account — logged, tracked and visible in one place. Casiflow gives you a complete financial picture of your gambling activity, per casino and across all of them combined. No more mental maths, no more forgotten deposits.</p>
+      <span class="feat-accent">Start tracking <i class="fa-solid fa-arrow-right"></i></span>
+    </div>
+
+    <div class="feat-visual fade-in delay-2">
+      <div class="fv-card">
+        <div class="fv-card-header">
+          <span class="fv-card-title">Recent Activity</span>
+          <span class="fv-card-badge">Betway</span>
+        </div>
+
+        <div class="fv-tx-row">
+          <div class="fv-tx-left">
+            <div class="fv-tx-icon dep"><i class="fa-solid fa-arrow-down"></i></div>
+            <div>
+              <div class="fv-tx-name">Deposit <span class="fv-tx-type dep">Deposit</span></div>
+              <div class="fv-tx-date">4 Apr 2026</div>
+            </div>
+          </div>
+          <div class="fv-tx-amount dep">−€200</div>
+        </div>
+
+        <div class="fv-tx-row">
+          <div class="fv-tx-left">
+            <div class="fv-tx-icon with"><i class="fa-solid fa-arrow-up"></i></div>
+            <div>
+              <div class="fv-tx-name">Withdrawal <span class="fv-tx-type with">Withdrawal</span></div>
+              <div class="fv-tx-date">6 Apr 2026</div>
+            </div>
+          </div>
+          <div class="fv-tx-amount with">+€450</div>
+        </div>
+
+        <div class="fv-tx-row">
+          <div class="fv-tx-left">
+            <div class="fv-tx-icon dep"><i class="fa-solid fa-arrow-down"></i></div>
+            <div>
+              <div class="fv-tx-name">Deposit <span class="fv-tx-type dep">Deposit</span></div>
+              <div class="fv-tx-date">8 Apr 2026</div>
+            </div>
+          </div>
+          <div class="fv-tx-amount dep">−€150</div>
+        </div>
+
+        <div class="fv-tx-row">
+          <div class="fv-tx-left">
+            <div class="fv-tx-icon with"><i class="fa-solid fa-arrow-up"></i></div>
+            <div>
+              <div class="fv-tx-name">Withdrawal <span class="fv-tx-type with">Withdrawal</span></div>
+              <div class="fv-tx-date">10 Apr 2026</div>
+            </div>
+          </div>
+          <div class="fv-tx-amount with">+€220</div>
+        </div>
+
+        <div class="fv-divider"></div>
+        <div class="fv-total-row">
+          <span class="fv-total-label">Net this casino</span>
+          <span class="fv-total-val">+€320</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ================================================================
+     FEATURE 4 — Set your own limits
+     EVEN: visual left, content right
+================================================================ -->
+<section class="feat-block even">
+  <div class="feat-inner">
+
+    <div class="feat-content fade-in">
+      <span class="feat-label">Control</span>
+      <h2 class="feat-title">Set your own limits</h2>
+      <p class="feat-copy">Every casino lets you set limits — but only at that casino. Casiflow lets you set a monthly deposit limit and a net loss limit that works across every casino you play at combined. One overarching limit that gives you the full picture of where you stand before you make your next deposit.</p>
+      <span class="feat-accent">Set your limits <i class="fa-solid fa-arrow-right"></i></span>
+    </div>
+
+    <div class="feat-visual fade-in delay-2">
+      <div class="fv-card">
+        <div class="fv-card-header">
+          <span class="fv-card-title">Your Limits</span>
+          <span class="fv-card-badge">April 2026</span>
+        </div>
+
+        <div class="fv-limit-block">
+          <div class="fv-limit-header">
+            <span class="fv-limit-name">Monthly Deposit Limit</span>
+            <span class="fv-limit-vals"><span>€450</span> of €500</span>
+          </div>
+          <div class="fv-bar-track">
+            <div class="fv-bar-fill warn" style="width:90%;"></div>
+          </div>
+          <div class="fv-limit-note"><span class="hi">90% used</span> — €50 remaining this month</div>
+        </div>
+
+        <div style="height:18px;"></div>
+
+        <div class="fv-limit-block">
+          <div class="fv-limit-header">
+            <span class="fv-limit-name">Net Loss Limit</span>
+            <span class="fv-limit-vals"><span>€200</span> of €1,200</span>
+          </div>
+          <div class="fv-bar-track">
+            <div class="fv-bar-fill safe" style="width:17%;"></div>
+          </div>
+          <div class="fv-limit-note"><span class="lo">17% used</span> — well within your limit</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ================================================================
+     FEATURE 5 — Goals
+     ODD: content left, visual right
+================================================================ -->
+<section class="feat-block odd">
+  <div class="feat-inner">
+
+    <div class="feat-content fade-in">
+      <span class="feat-label">Accountability</span>
+      <h2 class="feat-title">Goals</h2>
+      <p class="feat-copy">Whether you're trying to hit a profit target, stick to a monthly budget or simply play less than last month — Casiflow lets you set goals and tracks your progress automatically. Clear targets, real data, full accountability.</p>
+      <span class="feat-accent">Set a goal <i class="fa-solid fa-arrow-right"></i></span>
+    </div>
+
+    <div class="feat-visual fade-in delay-2">
+      <div class="fv-card">
+        <div class="fv-card-header">
+          <span class="fv-card-title">Active Goals</span>
+          <span class="fv-card-badge">1 in progress</span>
+        </div>
+
+        <div class="fv-goal-wrap">
+          <div class="fv-goal-ring-wrap">
+            <svg width="140" height="140" viewBox="0 0 140 140">
+              <circle class="fv-ring-track" cx="70" cy="70" r="54"/>
+              <circle class="fv-ring-fill"  cx="70" cy="70" r="54"/>
+            </svg>
+            <div class="fv-ring-center">
+              <span class="fv-ring-pct">68%</span>
+              <span class="fv-ring-sublbl">complete</span>
+            </div>
+          </div>
+          <div class="fv-goal-name">Monthly Budget Goal</div>
+          <div class="fv-goal-sub"><strong>€340</strong> of €500 remaining</div>
+        </div>
+
+        <div class="fv-goal-meta">
+          <div class="fv-goal-meta-item">
+            <div class="fv-goal-meta-lbl">Spent so far</div>
+            <div class="fv-goal-meta-val">€160</div>
+          </div>
+          <div class="fv-goal-meta-item">
+            <div class="fv-goal-meta-lbl">Days remaining</div>
+            <div class="fv-goal-meta-val">20</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ================================================================
+     FEATURE 6 — Monthly summaries
+     EVEN: visual left, content right
+================================================================ -->
+<section class="feat-block even">
+  <div class="feat-inner">
+
+    <div class="feat-content fade-in">
+      <span class="feat-label">Insights</span>
+      <h2 class="feat-title">Monthly summaries</h2>
+      <p class="feat-copy">At the end of every month, Casiflow gives you a clear snapshot of exactly how you performed. Total deposited, total withdrawn, net result, which casinos you played at and how each one performed. Spot patterns, identify trends and see whether your gambling is moving in the right direction over time.</p>
+      <span class="feat-accent">See your history <i class="fa-solid fa-arrow-right"></i></span>
+    </div>
+
+    <div class="feat-visual fade-in delay-2">
+      <div class="fv-card">
+        <div class="fv-card-header">
+          <span class="fv-card-title">Monthly Summary</span>
+          <span class="fv-card-badge">Auto-generated</span>
+        </div>
+
+        <div class="fv-month-label">Summary for</div>
+        <div class="fv-month-name">March 2026</div>
+
+        <div class="fv-summary-grid">
+          <div class="fv-summary-cell">
+            <div class="fv-summary-cell-label">Total Deposited</div>
+            <div class="fv-summary-cell-val">€890</div>
+          </div>
+          <div class="fv-summary-cell">
+            <div class="fv-summary-cell-label">Total Withdrawn</div>
+            <div class="fv-summary-cell-val">€1,240</div>
+          </div>
+          <div class="fv-summary-cell">
+            <div class="fv-summary-cell-label">Net Result</div>
+            <div class="fv-summary-cell-val green">+€350</div>
+          </div>
+          <div class="fv-summary-cell">
+            <div class="fv-summary-cell-label">Sessions Logged</div>
+            <div class="fv-summary-cell-val teal">12</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ================================================================
+     FINAL CTA
+================================================================ -->
+<section class="final-cta">
+  <div class="final-cta-glow"></div>
+  <div class="final-cta-inner fade-in">
+    <h2 class="final-cta-headline">You've seen what Casiflow can do.<br>Now try it for yourself.</h2>
+    <p class="final-cta-sub">Create your free account and get the full picture in minutes.</p>
+    <a href="https://app.casiflow.com/signup" class="btn-cta-lg">
+      <i class="fa-solid fa-arrow-right"></i>
+      Create My Free Account
+    </a>
+    <p class="cta-login-link">Already have an account? <a href="https://app.casiflow.com/login">Log in</a></p>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     FOOTER
+================================================================ -->
+<footer class="footer">
+  <div class="footer-main">
+    <div>
+      <div class="footer-brand">Casiflow</div>
+      <p class="footer-tagline">The house tracks everything. So should you.</p>
+    </div>
+
+    <div>
+      <p class="footer-col-title">Navigation</p>
+      <ul class="footer-list">
+        <li><a href="features.html">Features</a></li>
+        <li><a href="responsible-gambling.html">Responsible Gambling</a></li>
+        <li><a href="playbook.html">The Playbook</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="footer-col-title">Legal</p>
+      <ul class="footer-list">
+        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+        <li><a href="terms.html">Terms &amp; Conditions</a></li>
+        <li><a href="responsible-gambling.html">Responsible Gambling</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="partner.html">Partner with us</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2026 Casiflow. All rights reserved.</p>
+    <div class="footer-legal">
+      <a href="privacy-policy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ================================================================
+     JAVASCRIPT
+================================================================ -->
+<script>
+  /* --- Nav scroll shadow --- */
+  const nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+  }, { passive: true });
+
+  /* --- Hamburger menu --- */
+  const hamburger  = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  hamburger.addEventListener('click', () => {
+    const open = mobileMenu.classList.toggle('open');
+    hamburger.classList.toggle('open', open);
+    hamburger.setAttribute('aria-expanded', open);
+  });
+
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      hamburger.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  /* --- Scroll-triggered fade-in via IntersectionObserver --- */
+  const fadeEls = document.querySelectorAll('.fade-in');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.10, rootMargin: '0px 0px -40px 0px' });
+
+  fadeEls.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

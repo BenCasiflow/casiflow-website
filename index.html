@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Casiflow — The house tracks everything. So should you.</title>
+  <meta name="description" content="Casiflow gives you a single dashboard across every casino you play at — so you always know exactly where you stand." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #0f172a;
+      color: #e2e8f0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; }
+
+    /* ============================================================
+       SCROLL ANIMATIONS
+    ============================================================ */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+    .delay-1 { transition-delay: 0.10s; }
+    .delay-2 { transition-delay: 0.20s; }
+    .delay-3 { transition-delay: 0.30s; }
+    .delay-4 { transition-delay: 0.40s; }
+
+    /* ============================================================
+       NAVIGATION
+    ============================================================ */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(6,13,26,0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+    }
+    .nav.scrolled {
+      border-bottom-color: rgba(56,189,248,0.12);
+      box-shadow: 0 4px 32px rgba(0,0,0,0.45);
+      background: rgba(6,13,26,0.97);
+    }
+    .nav-inner {
+      max-width: 1280px; margin: 0 auto; padding: 0 32px;
+      height: 68px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Inter', sans-serif;
+      font-size: 22px; font-weight: 800; color: #38bdf8;
+      letter-spacing: -0.5px; flex-shrink: 0;
+    }
+    .nav-links {
+      display: flex; align-items: center; gap: 28px; list-style: none;
+    }
+    .nav-links a {
+      color: rgba(255,255,255,0.68); font-size: 14px; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #38bdf8; }
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+
+    .btn-outline {
+      display: inline-block; padding: 8px 18px;
+      border: 1px solid rgba(56,189,248,0.4); border-radius: 8px;
+      color: #38bdf8; font-size: 14px; font-weight: 600;
+      background: transparent; cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .btn-outline:hover { background: rgba(56,189,248,0.08); border-color: #38bdf8; }
+
+    .btn-teal {
+      display: inline-block; padding: 9px 20px;
+      border: none; border-radius: 8px;
+      background: linear-gradient(135deg, #0ea5e9, #0369a1);
+      color: white; font-size: 14px; font-weight: 700; cursor: pointer;
+      transition: opacity 0.2s, box-shadow 0.2s, transform 0.2s;
+      box-shadow: 0 4px 12px rgba(14,165,233,0.3);
+    }
+    .btn-teal:hover {
+      opacity: 0.92; box-shadow: 0 6px 20px rgba(14,165,233,0.45);
+      transform: translateY(-1px);
+    }
+
+    /* Hamburger */
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 4px; background: none; border: none;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 2px; background: #e2e8f0;
+      border-radius: 2px; transition: all 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    /* Mobile menu */
+    .mobile-menu {
+      display: none; position: absolute; top: 68px; left: 0; right: 0;
+      background: rgba(6,13,26,0.98);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(56,189,248,0.1);
+      padding: 20px 28px 28px; flex-direction: column;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      display: block; padding: 13px 0; color: rgba(255,255,255,0.78);
+      font-size: 16px; font-weight: 500;
+      border-bottom: 1px solid rgba(255,255,255,0.06); transition: color 0.2s;
+    }
+    .mobile-menu a:last-of-type { border-bottom: none; }
+    .mobile-menu a:hover { color: #38bdf8; }
+    .mobile-menu-actions { display: flex; gap: 12px; padding-top: 20px; }
+    .mobile-menu-actions .btn-outline,
+    .mobile-menu-actions .btn-teal { flex: 1; text-align: center; }
+
+    /* ============================================================
+       HERO
+    ============================================================ */
+    .hero {
+      position: relative; min-height: 100vh;
+      display: flex; align-items: center; padding-top: 68px; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1596838132731-3301c3fd4317?w=1920&q=80');
+      background-size: cover; background-position: center; z-index: 0;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        135deg,
+        rgba(6,13,26,0.95) 0%,
+        rgba(6,13,26,0.85) 50%,
+        rgba(2,30,60,0.88) 100%
+      );
+      z-index: 1;
+    }
+    .hero-inner {
+      position: relative; z-index: 2;
+      max-width: 1280px; margin: 0 auto; padding: 80px 32px;
+      width: 100%;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center;
+    }
+    .hero-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(36px, 5vw, 58px); font-weight: 900;
+      line-height: 1.08; color: #f8fafc; margin-bottom: 24px; letter-spacing: -1px;
+    }
+    .hero-headline .accent { color: #38bdf8; }
+    .hero-subheadline {
+      font-size: 18px; font-weight: 400; line-height: 1.65;
+      color: rgba(255,255,255,0.68); margin-bottom: 40px; max-width: 480px;
+    }
+    .hero-cta-group { display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
+    .btn-hero {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 16px 32px;
+      background: linear-gradient(135deg, #0ea5e9, #0369a1);
+      color: white; border-radius: 12px; font-size: 16px; font-weight: 700;
+      cursor: pointer; transition: all 0.25s;
+      box-shadow: 0 8px 24px rgba(14,165,233,0.38);
+    }
+    .btn-hero:hover { transform: translateY(-2px); box-shadow: 0 14px 38px rgba(14,165,233,0.52); }
+    .hero-login-link { font-size: 14px; color: rgba(255,255,255,0.5); }
+    .hero-login-link a {
+      color: #38bdf8; font-weight: 600;
+      text-decoration: underline; text-decoration-color: rgba(56,189,248,0.4);
+    }
+    .hero-login-link a:hover { color: #7dd3fc; }
+
+    /* ============================================================
+       DASHBOARD MOCKUP  — dark navy theme matching the Casiflow app
+    ============================================================ */
+    .mockup-wrapper { display: flex; align-items: center; justify-content: center; perspective: 1200px; }
+    .mockup-tilt {
+      transform: rotateY(-8deg) rotateX(4deg);
+      transform-style: preserve-3d;
+      /* teal glow + deep shadow */
+      box-shadow:
+        -24px 24px 80px rgba(0,0,0,0.70),
+        0 0 0 1px rgba(56,189,248,0.22),
+        0 0 60px rgba(14,165,233,0.14);
+      border-radius: 16px; width: 100%; max-width: 560px;
+    }
+    .mockup {
+      background: #0f172a; border-radius: 16px; overflow: hidden;
+      border: 1px solid rgba(56,189,248,0.18); font-family: 'Inter', sans-serif;
+    }
+    /* Top bar — dark navy matching the app sidebar */
+    .mockup-topbar {
+      background: linear-gradient(180deg, #1e293b 0%, #162032 100%);
+      padding: 12px 16px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid rgba(56,189,248,0.12);
+    }
+    .mockup-topbar-title { font-size: 14px; font-weight: 700; color: #f1f5f9; }
+    .mockup-log-btn {
+      display: flex; align-items: center; gap: 5px; padding: 6px 11px;
+      background: linear-gradient(135deg, #0ea5e9, #0369a1);
+      color: white; border-radius: 7px; font-size: 11px; font-weight: 700;
+      box-shadow: 0 2px 8px rgba(14,165,233,0.35);
+    }
+    /* Body — dark navy */
+    .mockup-body { padding: 13px; background: #0f172a; }
+    /* Time filter pills — dark style */
+    .mockup-pills { display: flex; gap: 6px; margin-bottom: 13px; }
+    .mockup-pill {
+      padding: 4px 11px; border-radius: 100px; font-size: 10.5px; font-weight: 600;
+      background: rgba(30,41,59,0.9); color: rgba(255,255,255,0.45);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .mockup-pill.active {
+      background: #0ea5e9; color: white; border-color: #0ea5e9;
+      box-shadow: 0 2px 8px rgba(14,165,233,0.3);
+    }
+    /* Stat cards — dark navy with subtle borders */
+    .mockup-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 7px; margin-bottom: 13px; }
+    .mockup-stat {
+      background: rgba(30,41,59,0.7); border-radius: 9px; padding: 10px 9px;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-left: 3px solid rgba(255,255,255,0.1);
+    }
+    .mockup-stat.net  { border-left-color: #22c55e; background: rgba(34,197,94,0.08); border-color: rgba(34,197,94,0.2); }
+    .mockup-stat.blue { border-left-color: #38bdf8; }
+    .mockup-stat-label {
+      font-size: 8px; font-weight: 500; color: rgba(255,255,255,0.4);
+      text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 5px; line-height: 1.2;
+    }
+    .mockup-stat-value { font-size: 13px; font-weight: 800; color: rgba(255,255,255,0.9); }
+    .mockup-stat-value.net  { color: #22c55e; font-size: 14px; }
+    .mockup-stat-value.blue { color: #38bdf8; }
+    /* Mini bar chart — dark */
+    .mockup-chart-card {
+      background: rgba(30,41,59,0.6); border-radius: 9px; padding: 12px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .mockup-chart-title {
+      font-size: 9.5px; font-weight: 600; color: rgba(255,255,255,0.38);
+      margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.3px;
+    }
+    .mockup-chart { display: flex; align-items: flex-end; gap: 8px; height: 72px; }
+    .mockup-bar-group {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; gap: 3px; height: 100%;
+    }
+    .mockup-bar-pair { display: flex; gap: 3px; align-items: flex-end; flex: 1; }
+    .mockup-bar { width: 9px; border-radius: 2px 2px 0 0; }
+    .mockup-bar.dep  { background: #38bdf8; opacity: 0.85; }
+    .mockup-bar.with { background: #22c55e; opacity: 0.85; }
+    .mockup-bar-lbl  { font-size: 8px; color: rgba(255,255,255,0.3); font-weight: 500; }
+    .mockup-legend   { display: flex; gap: 12px; margin-top: 8px; }
+    .mockup-legend-item { display: flex; align-items: center; gap: 4px; font-size: 9px; color: rgba(255,255,255,0.38); font-weight: 500; }
+    .mockup-legend-dot { width: 8px; height: 8px; border-radius: 2px; }
+
+    /* ============================================================
+       SECTION COMMON
+    ============================================================ */
+    .section { padding: 100px 32px; }
+    .section-inner { max-width: 1280px; margin: 0 auto; }
+    .section-label {
+      display: inline-block; font-size: 11px; font-weight: 700; color: #0ea5e9;
+      letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 14px;
+    }
+    .section-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 3.8vw, 44px); font-weight: 700;
+      color: #f8fafc; line-height: 1.15; margin-bottom: 0; letter-spacing: -0.5px;
+    }
+
+    /* ============================================================
+       PROMISES
+    ============================================================ */
+    .promises { background: #0b1628; }
+    .promises-grid {
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 22px; margin-top: 56px;
+    }
+    .promise-card {
+      background: rgba(30,41,59,0.55); border: 1px solid rgba(56,189,248,0.09);
+      border-radius: 16px; padding: 32px 26px;
+      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    }
+    .promise-card:hover {
+      border-color: rgba(56,189,248,0.32); transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.3);
+    }
+    .promise-icon {
+      width: 52px; height: 52px; border-radius: 12px;
+      background: rgba(14,165,233,0.1); display: flex;
+      align-items: center; justify-content: center;
+      margin-bottom: 20px; font-size: 22px; color: #38bdf8;
+    }
+    .promise-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px; font-weight: 700; color: #f8fafc; margin-bottom: 12px; line-height: 1.2;
+    }
+    .promise-copy { font-size: 15px; color: rgba(255,255,255,0.52); line-height: 1.65; }
+
+    /* ============================================================
+       HOW IT WORKS
+    ============================================================ */
+    .how-it-works { background: #111827; }
+    .steps-row {
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 0;
+      position: relative; margin-top: 60px;
+    }
+    .steps-row::before {
+      content: '';
+      position: absolute; top: 40px;
+      left: calc(12.5% + 18px); right: calc(12.5% + 18px);
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(56,189,248,0.28) 20%, rgba(56,189,248,0.28) 80%, transparent);
+      z-index: 0;
+    }
+    .step { padding: 0 24px; text-align: center; position: relative; z-index: 1; }
+    .step:first-child { padding-left: 0; }
+    .step:last-child  { padding-right: 0; }
+    .step-num-wrap {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 56px; height: 56px; border-radius: 50%;
+      background: linear-gradient(135deg, #0ea5e9, #0369a1);
+      box-shadow: 0 0 0 7px rgba(14,165,233,0.1);
+      margin-bottom: 18px;
+    }
+    .step-num { font-size: 20px; font-weight: 800; color: white; }
+    .step-icon-row { font-size: 14px; color: rgba(255,255,255,0.55); margin-bottom: 12px; }
+    .step-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px; font-weight: 700; color: #f8fafc; margin-bottom: 10px;
+    }
+    .step-copy { font-size: 14px; color: rgba(255,255,255,0.48); line-height: 1.65; }
+
+    /* ============================================================
+       FEATURES
+    ============================================================ */
+    .features { background: #0f172a; }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; margin-top: 56px;
+    }
+    .feature-card {
+      background: rgba(30,41,59,0.48); border: 1px solid rgba(56,189,248,0.07);
+      border-radius: 16px; padding: 30px 26px;
+      transition: border-color 0.3s, transform 0.3s, background 0.3s, box-shadow 0.3s;
+    }
+    .feature-card:hover {
+      border-color: rgba(56,189,248,0.26); transform: translateY(-3px);
+      background: rgba(30,41,59,0.78); box-shadow: 0 12px 40px rgba(0,0,0,0.22);
+    }
+    .feature-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: rgba(14,165,233,0.1); display: flex;
+      align-items: center; justify-content: center;
+      margin-bottom: 18px; font-size: 20px; color: #0ea5e9;
+    }
+    .feature-title { font-size: 17px; font-weight: 700; color: #f8fafc; margin-bottom: 10px; }
+    .feature-copy { font-size: 14px; color: rgba(255,255,255,0.48); line-height: 1.65; }
+    .features-see-all {
+      display: inline-flex; align-items: center; gap: 6px; margin-top: 48px;
+      font-size: 15px; font-weight: 600; color: #0ea5e9; transition: gap 0.2s, color 0.2s;
+    }
+    .features-see-all:hover { gap: 10px; color: #38bdf8; }
+
+    /* ============================================================
+       RESPONSIBLE GAMBLING
+    ============================================================ */
+    .responsible { background: #0b1628; }
+    .responsible-inner { max-width: 680px; margin: 0 auto; text-align: center; }
+    .resp-icon {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: rgba(14,165,233,0.1); border: 1px solid rgba(14,165,233,0.22);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 28px; font-size: 28px; color: #38bdf8;
+    }
+    .resp-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(26px, 3.5vw, 38px); font-weight: 700;
+      color: #f8fafc; margin-bottom: 20px; line-height: 1.2;
+    }
+    .resp-copy {
+      font-size: 17px; color: rgba(255,255,255,0.52); line-height: 1.75; margin-bottom: 32px;
+    }
+    .resp-link {
+      display: inline-flex; align-items: center; gap: 8px; color: #38bdf8;
+      font-size: 15px; font-weight: 600; transition: gap 0.2s, color 0.2s;
+    }
+    .resp-link:hover { gap: 12px; color: #7dd3fc; }
+
+    /* ============================================================
+       FINAL CTA
+    ============================================================ */
+    .final-cta { position: relative; background: #060d1a; overflow: hidden; }
+    .final-cta-glow {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 60%, rgba(14,165,233,0.09) 0%, transparent 70%);
+      z-index: 0;
+    }
+    .final-cta-inner {
+      position: relative; z-index: 1;
+      max-width: 700px; margin: 0 auto; text-align: center; padding: 120px 32px;
+    }
+    .final-cta-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(30px, 4.5vw, 52px); font-weight: 900;
+      color: #f8fafc; line-height: 1.1; margin-bottom: 20px; letter-spacing: -0.5px;
+    }
+    .final-cta-sub {
+      font-size: 18px; color: rgba(255,255,255,0.52); line-height: 1.65; margin-bottom: 48px;
+    }
+    .btn-cta-lg {
+      display: inline-flex; align-items: center; gap: 12px; padding: 20px 44px;
+      background: linear-gradient(135deg, #0ea5e9, #0369a1);
+      color: white; border-radius: 14px; font-size: 18px; font-weight: 700;
+      cursor: pointer; transition: all 0.25s;
+      box-shadow: 0 12px 36px rgba(14,165,233,0.40);
+    }
+    .btn-cta-lg:hover { transform: translateY(-3px); box-shadow: 0 20px 52px rgba(14,165,233,0.55); }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    .footer {
+      background: #060d1a;
+      border-top: 1px solid rgba(56,189,248,0.07);
+      padding: 64px 32px 0;
+    }
+    .footer-main {
+      max-width: 1280px; margin: 0 auto;
+      display: grid; grid-template-columns: 2fr 1.5fr 1.5fr; gap: 56px;
+      padding-bottom: 48px;
+    }
+    .footer-brand { font-family: 'Inter', sans-serif; font-size: 24px; font-weight: 800; color: #38bdf8; letter-spacing: -0.5px; margin-bottom: 12px; }
+    .footer-tagline { font-size: 14px; color: rgba(255,255,255,0.38); line-height: 1.6; max-width: 230px; }
+    .footer-col-title { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.32); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 18px; }
+    .footer-list { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+    .footer-list a { font-size: 14px; color: rgba(255,255,255,0.48); transition: color 0.2s; }
+    .footer-list a:hover { color: #38bdf8; }
+    .footer-bottom {
+      max-width: 1280px; margin: 0 auto;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 20px 0;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-copy { font-size: 13px; color: rgba(255,255,255,0.28); }
+    .footer-legal { display: flex; gap: 20px; }
+    .footer-legal a { font-size: 13px; color: rgba(255,255,255,0.28); transition: color 0.2s; }
+    .footer-legal a:hover { color: #38bdf8; }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 1100px) {
+      .promises-grid { grid-template-columns: repeat(2,1fr); }
+      .features-grid  { grid-template-columns: repeat(2,1fr); }
+    }
+    @media (max-width: 960px) {
+      .steps-row { grid-template-columns: repeat(2,1fr); gap: 48px; }
+      .steps-row::before { display: none; }
+      .step { padding: 0; }
+      .footer-main { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 860px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 56px; padding: 60px 24px; }
+      .mockup-tilt { transform: none; box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(56,189,248,0.15); }
+      .hero-text { text-align: center; }
+      .hero-subheadline { max-width: 100%; }
+      .hero-cta-group { align-items: center; }
+    }
+    @media (max-width: 768px) {
+      .nav-links  { display: none; }
+      .nav-actions { display: none; }
+      .hamburger  { display: flex; }
+      .nav-inner  { padding: 0 20px; }
+      .section    { padding: 72px 20px; }
+      .promises-grid { grid-template-columns: 1fr; }
+      .steps-row  { grid-template-columns: 1fr; gap: 36px; }
+      .step { text-align: left; align-items: flex-start; }
+      .features-grid { grid-template-columns: 1fr; }
+      .footer-main   { grid-template-columns: 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+      .footer-legal  { flex-wrap: wrap; justify-content: center; }
+      .mockup-stats  { grid-template-columns: repeat(2,1fr); }
+      .final-cta-inner { padding: 80px 20px; }
+    }
+    @media (max-width: 480px) {
+      .hero-headline { font-size: 32px; }
+      .btn-hero { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ================================================================
+     NAVIGATION
+================================================================ -->
+<nav class="nav" id="mainNav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Casiflow</a>
+
+    <ul class="nav-links">
+      <li><a href="features.html">Features</a></li>
+      <li><a href="responsible-gambling.html">Responsible Gambling</a></li>
+      <li><a href="playbook.html">The Playbook</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <a href="https://app.casiflow.com/login"  class="btn-outline">Log In</a>
+      <a href="https://app.casiflow.com/signup" class="btn-teal">Sign Up</a>
+    </div>
+
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="features.html">Features</a>
+    <a href="responsible-gambling.html">Responsible Gambling</a>
+    <a href="playbook.html">The Playbook</a>
+    <a href="faq.html">FAQ</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <div class="mobile-menu-actions">
+      <a href="https://app.casiflow.com/login"  class="btn-outline">Log In</a>
+      <a href="https://app.casiflow.com/signup" class="btn-teal">Sign Up Free</a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ================================================================
+     HERO
+================================================================ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+
+  <div class="hero-inner">
+    <!-- Text -->
+    <div class="hero-text fade-in">
+      <h1 class="hero-headline">
+        The house tracks<br>everything.<br>
+        <span class="accent">So should you.</span>
+      </h1>
+
+      <p class="hero-subheadline">
+        Casiflow gives you a single dashboard across every casino you play at — so you always know exactly where you stand.
+      </p>
+
+      <div class="hero-cta-group">
+        <a href="https://app.casiflow.com/signup" class="btn-hero">
+          <i class="fa-solid fa-arrow-right"></i>
+          Create My Free Account
+        </a>
+        <p class="hero-login-link">
+          Already have an account? <a href="https://app.casiflow.com/login">Log in</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- Dashboard mockup -->
+    <div class="mockup-wrapper fade-in delay-2">
+      <div class="mockup-tilt">
+        <div class="mockup">
+
+          <!-- Top bar -->
+          <div class="mockup-topbar">
+            <span class="mockup-topbar-title">Dashboard</span>
+            <div class="mockup-log-btn">
+              <i class="fa-solid fa-plus" style="font-size:9px;"></i>
+              Log the Session
+            </div>
+          </div>
+
+          <!-- Body -->
+          <div class="mockup-body">
+            <!-- Pills -->
+            <div class="mockup-pills">
+              <div class="mockup-pill active">All Time</div>
+              <div class="mockup-pill">Last Week</div>
+              <div class="mockup-pill">This Month</div>
+            </div>
+
+            <!-- Stat cards -->
+            <div class="mockup-stats">
+              <div class="mockup-stat">
+                <div class="mockup-stat-label">Total Deposited</div>
+                <div class="mockup-stat-value">€2,450</div>
+              </div>
+              <div class="mockup-stat">
+                <div class="mockup-stat-label">Total Withdrawn</div>
+                <div class="mockup-stat-value">€3,100</div>
+              </div>
+              <div class="mockup-stat net">
+                <div class="mockup-stat-label">Net Result</div>
+                <div class="mockup-stat-value net">+€650</div>
+              </div>
+              <div class="mockup-stat blue">
+                <div class="mockup-stat-label">Total Balance</div>
+                <div class="mockup-stat-value blue">€890</div>
+              </div>
+            </div>
+
+            <!-- Bar chart -->
+            <div class="mockup-chart-card">
+              <div class="mockup-chart-title">Deposits vs Withdrawals — Last 6 Months</div>
+              <div class="mockup-chart">
+                <!-- Nov -->
+                <div class="mockup-bar-group">
+                  <div class="mockup-bar-pair">
+                    <div class="mockup-bar dep"  style="height:36px;"></div>
+                    <div class="mockup-bar with" style="height:26px;"></div>
+                  </div>
+                  <div class="mockup-bar-lbl">Nov</div>
+                </div>
+                <!-- Dec -->
+                <div class="mockup-bar-group">
+                  <div class="mockup-bar-pair">
+                    <div class="mockup-bar dep"  style="height:44px;"></div>
+                    <div class="mockup-bar with" style="height:40px;"></div>
+                  </div>
+                  <div class="mockup-bar-lbl">Dec</div>
+                </div>
+                <!-- Jan -->
+                <div class="mockup-bar-group">
+                  <div class="mockup-bar-pair">
+                    <div class="mockup-bar dep"  style="height:30px;"></div>
+                    <div class="mockup-bar with" style="height:38px;"></div>
+                  </div>
+                  <div class="mockup-bar-lbl">Jan</div>
+                </div>
+                <!-- Feb -->
+                <div class="mockup-bar-group">
+                  <div class="mockup-bar-pair">
+                    <div class="mockup-bar dep"  style="height:48px;"></div>
+                    <div class="mockup-bar with" style="height:54px;"></div>
+                  </div>
+                  <div class="mockup-bar-lbl">Feb</div>
+                </div>
+                <!-- Mar -->
+                <div class="mockup-bar-group">
+                  <div class="mockup-bar-pair">
+                    <div class="mockup-bar dep"  style="height:38px;"></div>
+                    <div class="mockup-bar with" style="height:50px;"></div>
+                  </div>
+                  <div class="mockup-bar-lbl">Mar</div>
+                </div>
+                <!-- Apr -->
+                <div class="mockup-bar-group">
+                  <div class="mockup-bar-pair">
+                    <div class="mockup-bar dep"  style="height:34px;"></div>
+                    <div class="mockup-bar with" style="height:56px;"></div>
+                  </div>
+                  <div class="mockup-bar-lbl">Apr</div>
+                </div>
+              </div>
+              <div class="mockup-legend">
+                <div class="mockup-legend-item">
+                  <div class="mockup-legend-dot" style="background:#0ea5e9;"></div>Deposits
+                </div>
+                <div class="mockup-legend-item">
+                  <div class="mockup-legend-dot" style="background:#10b981;"></div>Withdrawals
+                </div>
+              </div>
+            </div>
+          </div><!-- /mockup-body -->
+
+        </div><!-- /mockup -->
+      </div><!-- /mockup-tilt -->
+    </div><!-- /mockup-wrapper -->
+  </div><!-- /hero-inner -->
+</section>
+
+
+<!-- ================================================================
+     THE CASIFLOW PROMISES
+================================================================ -->
+<section class="section promises" id="promises">
+  <div class="section-inner">
+    <div class="fade-in">
+      <span class="section-label">Our commitment</span>
+      <h2 class="section-headline">What Casiflow promises you</h2>
+    </div>
+
+    <div class="promises-grid">
+      <div class="promise-card fade-in delay-1">
+        <div class="promise-icon"><i class="fa-solid fa-tag"></i></div>
+        <h3 class="promise-title">It's free</h3>
+        <p class="promise-copy">No subscriptions. No hidden fees. No surprises.</p>
+      </div>
+
+      <div class="promise-card fade-in delay-2">
+        <div class="promise-icon"><i class="fa-solid fa-chart-line"></i></div>
+        <h3 class="promise-title">Know if you're actually winning</h3>
+        <p class="promise-copy">Most players think they're up. Casiflow tells you if you actually are.</p>
+      </div>
+
+      <div class="promise-card fade-in delay-3">
+        <div class="promise-icon"><i class="fa-solid fa-layer-group"></i></div>
+        <h3 class="promise-title">Every casino, one view</h3>
+        <p class="promise-copy">However many casinos you play at — one login, full picture.</p>
+      </div>
+
+      <div class="promise-card fade-in delay-4">
+        <div class="promise-icon"><i class="fa-solid fa-bolt"></i></div>
+        <h3 class="promise-title">Play with an edge</h3>
+        <p class="promise-copy">The house runs on data. Now you do too.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     HOW IT WORKS
+================================================================ -->
+<section class="section how-it-works" id="how-it-works">
+  <div class="section-inner">
+    <div class="fade-in" style="text-align:center;">
+      <span class="section-label">Getting started</span>
+      <h2 class="section-headline" style="text-align:center;">Up and running in minutes</h2>
+    </div>
+
+    <div class="steps-row">
+      <div class="step fade-in delay-1">
+        <div class="step-num-wrap"><span class="step-num">1</span></div>
+        <div class="step-icon-row"><i class="fa-solid fa-building-columns"></i></div>
+        <h3 class="step-title">Add your casinos</h3>
+        <p class="step-copy">Add every casino you play at. No limits, no restrictions — if you play there, track it here.</p>
+      </div>
+
+      <div class="step fade-in delay-2">
+        <div class="step-num-wrap"><span class="step-num">2</span></div>
+        <div class="step-icon-row"><i class="fa-solid fa-pen-to-square"></i></div>
+        <h3 class="step-title">Log your activity</h3>
+        <p class="step-copy">Record your deposits, withdrawals and current balances. Or upload a CSV straight from your casino account.</p>
+      </div>
+
+      <div class="step fade-in delay-3">
+        <div class="step-num-wrap"><span class="step-num">3</span></div>
+        <div class="step-icon-row"><i class="fa-solid fa-chart-bar"></i></div>
+        <h3 class="step-title">Know your numbers</h3>
+        <p class="step-copy">Your personal dashboard shows you exactly where you stand — per casino, across all of them, at any time.</p>
+      </div>
+
+      <div class="step fade-in delay-4">
+        <div class="step-num-wrap"><span class="step-num">4</span></div>
+        <div class="step-icon-row"><i class="fa-solid fa-rotate"></i></div>
+        <h3 class="step-title">Never lose track again</h3>
+        <p class="step-copy">After every session, update your numbers. That's it. Casiflow handles the rest and your dashboard shows you exactly where you stand.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     FEATURES OVERVIEW
+================================================================ -->
+<section class="section features" id="features">
+  <div class="section-inner">
+    <div class="fade-in">
+      <span class="section-label">Features</span>
+      <h2 class="section-headline">Everything you need to play smarter</h2>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card fade-in delay-1">
+        <div class="feature-icon"><i class="fa-solid fa-gauge-high"></i></div>
+        <h3 class="feature-title">One dashboard, every casino</h3>
+        <p class="feature-copy">No switching. No guessing. Just clarity.</p>
+      </div>
+
+      <div class="feature-card fade-in delay-2">
+        <div class="feature-icon"><i class="fa-solid fa-calculator"></i></div>
+        <h3 class="feature-title">Know your real net result</h3>
+        <p class="feature-copy">The number most players never know. Casiflow shows you.</p>
+      </div>
+
+      <div class="feature-card fade-in delay-3">
+        <div class="feature-icon"><i class="fa-solid fa-arrows-rotate"></i></div>
+        <h3 class="feature-title">Track deposits, withdrawals and balances</h3>
+        <p class="feature-copy">Accurate, detailed and always up to date.</p>
+      </div>
+
+      <div class="feature-card fade-in delay-1">
+        <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <h3 class="feature-title">Set your own limits</h3>
+        <p class="feature-copy">Across all your casinos combined. Not just one at a time.</p>
+      </div>
+
+      <div class="feature-card fade-in delay-2">
+        <div class="feature-icon"><i class="fa-solid fa-bullseye"></i></div>
+        <h3 class="feature-title">Goals</h3>
+        <p class="feature-copy">Set targets. Track progress. Stay accountable.</p>
+      </div>
+
+      <div class="feature-card fade-in delay-3">
+        <div class="feature-icon"><i class="fa-solid fa-calendar-days"></i></div>
+        <h3 class="feature-title">Monthly summaries</h3>
+        <p class="feature-copy">Spot patterns. Track trends. See exactly how you're performing.</p>
+      </div>
+    </div>
+
+    <a href="features.html" class="features-see-all fade-in">
+      See all features <i class="fa-solid fa-arrow-right"></i>
+    </a>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     RESPONSIBLE GAMBLING
+================================================================ -->
+<section class="section responsible" id="responsible-gambling">
+  <div class="section-inner">
+    <div class="responsible-inner fade-in">
+      <div class="resp-icon"><i class="fa-solid fa-heart-pulse"></i></div>
+      <h2 class="resp-headline">Gambling is more fun when you're in control.</h2>
+      <p class="resp-copy">
+        Casiflow isn't here to lecture you. But knowing your numbers is the single most powerful thing you can do as a player to stay in control. Set limits, track your activity and always know where you stand.
+      </p>
+      <a href="responsible-gambling.html" class="resp-link">
+        Learn more about responsible gambling <i class="fa-solid fa-arrow-right"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     FINAL CTA
+================================================================ -->
+<section class="final-cta">
+  <div class="final-cta-glow"></div>
+  <div class="final-cta-inner fade-in">
+    <h2 class="final-cta-headline">You've been playing blind.<br>It's time to change that.</h2>
+    <p class="final-cta-sub">Join Casiflow for free and finally know exactly where you stand.</p>
+    <a href="https://app.casiflow.com/signup" class="btn-cta-lg">
+      <i class="fa-solid fa-arrow-right"></i>
+      Create My Free Account
+    </a>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     FOOTER
+================================================================ -->
+<footer class="footer">
+  <div class="footer-main">
+    <div>
+      <div class="footer-brand">Casiflow</div>
+      <p class="footer-tagline">The house tracks everything. So should you.</p>
+    </div>
+
+    <div>
+      <p class="footer-col-title">Navigation</p>
+      <ul class="footer-list">
+        <li><a href="features.html">Features</a></li>
+        <li><a href="responsible-gambling.html">Responsible Gambling</a></li>
+        <li><a href="playbook.html">The Playbook</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="footer-col-title">Legal</p>
+      <ul class="footer-list">
+        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+        <li><a href="terms.html">Terms &amp; Conditions</a></li>
+        <li><a href="responsible-gambling.html">Responsible Gambling</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="partner.html">Partner with us</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2026 Casiflow. All rights reserved.</p>
+    <div class="footer-legal">
+      <a href="privacy-policy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ================================================================
+     JAVASCRIPT
+================================================================ -->
+<script>
+  /* --- Nav scroll shadow --- */
+  const nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+  }, { passive: true });
+
+  /* --- Hamburger menu --- */
+  const hamburger   = document.getElementById('hamburger');
+  const mobileMenu  = document.getElementById('mobileMenu');
+
+  hamburger.addEventListener('click', () => {
+    const open = mobileMenu.classList.toggle('open');
+    hamburger.classList.toggle('open', open);
+    hamburger.setAttribute('aria-expanded', open);
+  });
+
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      hamburger.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  /* --- Scroll-triggered fade-in via IntersectionObserver --- */
+  const fadeEls = document.querySelectorAll('.fade-in');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  fadeEls.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

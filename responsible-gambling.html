@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Responsible Gambling — Casiflow</title>
+  <meta name="description" content="Smart players know their limits. Casiflow gives you the tools to stay in control — across every casino you play at, all in one place." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #0f172a;
+      color: #e2e8f0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; }
+
+    /* ============================================================
+       SCROLL ANIMATIONS
+    ============================================================ */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+    .delay-1 { transition-delay: 0.10s; }
+    .delay-2 { transition-delay: 0.20s; }
+    .delay-3 { transition-delay: 0.30s; }
+    .delay-4 { transition-delay: 0.40s; }
+
+    /* ============================================================
+       NAVIGATION — identical to index.html
+    ============================================================ */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(6,13,26,0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+    }
+    .nav.scrolled {
+      border-bottom-color: rgba(56,189,248,0.12);
+      box-shadow: 0 4px 32px rgba(0,0,0,0.45);
+      background: rgba(6,13,26,0.97);
+    }
+    .nav-inner {
+      max-width: 1280px; margin: 0 auto; padding: 0 32px;
+      height: 68px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Inter', sans-serif;
+      font-size: 22px; font-weight: 800; color: #38bdf8;
+      letter-spacing: -0.5px; flex-shrink: 0;
+    }
+    .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+    .nav-links a {
+      color: rgba(255,255,255,0.68); font-size: 14px; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover  { color: #38bdf8; }
+    .nav-links a.active { color: #38bdf8; }
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+    .btn-outline {
+      display: inline-block; padding: 8px 18px;
+      border: 1px solid rgba(56,189,248,0.4); border-radius: 8px;
+      color: #38bdf8; font-size: 14px; font-weight: 600;
+      background: transparent; cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .btn-outline:hover { background: rgba(56,189,248,0.08); border-color: #38bdf8; }
+    .btn-teal {
+      display: inline-block; padding: 9px 20px;
+      border: none; border-radius: 8px;
+      background: linear-gradient(135deg, #0ea5e9, #0369a1);
+      color: white; font-size: 14px; font-weight: 700; cursor: pointer;
+      transition: opacity 0.2s, box-shadow 0.2s, transform 0.2s;
+      box-shadow: 0 4px 12px rgba(14,165,233,0.3);
+    }
+    .btn-teal:hover {
+      opacity: 0.92; box-shadow: 0 6px 20px rgba(14,165,233,0.45);
+      transform: translateY(-1px);
+    }
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 4px; background: none; border: none;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 2px; background: #e2e8f0;
+      border-radius: 2px; transition: all 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+    .mobile-menu {
+      display: none; position: absolute; top: 68px; left: 0; right: 0;
+      background: rgba(6,13,26,0.98);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(56,189,248,0.1);
+      padding: 20px 28px 28px; flex-direction: column;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      display: block; padding: 13px 0; color: rgba(255,255,255,0.78);
+      font-size: 16px; font-weight: 500;
+      border-bottom: 1px solid rgba(255,255,255,0.06); transition: color 0.2s;
+    }
+    .mobile-menu a:last-of-type { border-bottom: none; }
+    .mobile-menu a:hover { color: #38bdf8; }
+    .mobile-menu-actions { display: flex; gap: 12px; padding-top: 20px; }
+    .mobile-menu-actions .btn-outline,
+    .mobile-menu-actions .btn-teal { flex: 1; text-align: center; }
+
+    /* ============================================================
+       PAGE HERO — compact
+    ============================================================ */
+    .page-hero {
+      background: #0f172a;
+      padding: 112px 32px 36px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 100%, rgba(14,165,233,0.07) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .page-hero-label {
+      display: inline-block; font-size: 11px; font-weight: 700; color: #0ea5e9;
+      letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 20px;
+    }
+    .page-hero-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 2.2vw, 2.5rem); font-weight: 900;
+      color: #f8fafc; line-height: 1.14; letter-spacing: -0.3px;
+      margin-bottom: 16px; max-width: 640px; margin-left: auto; margin-right: auto;
+    }
+    .page-hero-sub {
+      font-size: 17px; color: rgba(255,255,255,0.58); line-height: 1.7;
+      max-width: 540px; margin: 0 auto;
+    }
+
+    /* ============================================================
+       SHARED SECTION STYLES
+    ============================================================ */
+    .rg-section { padding: 88px 32px; }
+    .rg-section.dark  { background: #0f172a; }
+    .rg-section.mid   { background: #0b1628; }
+
+    /* Centered prose layout */
+    .rg-prose {
+      max-width: 800px; margin: 0 auto;
+    }
+    .rg-label {
+      display: inline-block; font-size: 11px; font-weight: 700; color: #0ea5e9;
+      letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 14px;
+    }
+    .rg-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(24px, 3vw, 36px); font-weight: 700;
+      color: #f8fafc; line-height: 1.18; letter-spacing: -0.3px;
+      margin-bottom: 20px;
+    }
+    .rg-copy {
+      font-size: 16px; color: rgba(255,255,255,0.55); line-height: 1.82;
+    }
+    .rg-copy + .rg-copy { margin-top: 16px; }
+
+    /* Bullet lists */
+    .rg-list {
+      list-style: none; margin-top: 28px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .rg-list li {
+      display: flex; align-items: flex-start; gap: 14px;
+      font-size: 16px; color: rgba(255,255,255,0.65); line-height: 1.65;
+    }
+    .rg-list li .bullet-icon {
+      flex-shrink: 0; margin-top: 3px;
+      width: 22px; height: 22px; border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+    }
+    .bullet-icon.check {
+      background: rgba(14,165,233,0.12); color: #38bdf8;
+    }
+    .bullet-icon.warn {
+      background: rgba(245,158,11,0.12); color: #f59e0b;
+    }
+    .bullet-icon.arrow {
+      background: rgba(14,165,233,0.12); color: #38bdf8;
+    }
+    .rg-closing {
+      margin-top: 28px; font-size: 15px; font-style: italic;
+      color: rgba(255,255,255,0.42); line-height: 1.7;
+    }
+    .rg-teal-link {
+      color: #38bdf8; font-weight: 600;
+      text-decoration: underline; text-decoration-color: rgba(56,189,248,0.35);
+      transition: color 0.2s;
+    }
+    .rg-teal-link:hover { color: #7dd3fc; }
+
+    /* ============================================================
+       SECTION 2 — Two column with visual
+    ============================================================ */
+    .rg-two-col {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center;
+    }
+
+    /* Limits visual card */
+    .fv-card {
+      background: #0f172a;
+      border: 1px solid rgba(56,189,248,0.15);
+      border-radius: 16px;
+      padding: 24px;
+      width: 100%; max-width: 400px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.55), 0 0 0 1px rgba(56,189,248,0.08);
+      font-family: 'Inter', sans-serif;
+    }
+    .fv-card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 22px; padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .fv-card-title  { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.9); }
+    .fv-card-badge  {
+      font-size: 10px; font-weight: 600; color: #38bdf8;
+      background: rgba(56,189,248,0.1); border: 1px solid rgba(56,189,248,0.2);
+      padding: 3px 10px; border-radius: 100px;
+    }
+    .fv-limit-block { margin-bottom: 20px; }
+    .fv-limit-block:last-child { margin-bottom: 0; }
+    .fv-limit-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 9px;
+    }
+    .fv-limit-name { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.75); }
+    .fv-limit-vals { font-size: 11px; color: rgba(255,255,255,0.38); }
+    .fv-limit-vals span { color: rgba(255,255,255,0.65); font-weight: 600; }
+    .fv-bar-track {
+      height: 8px; background: rgba(255,255,255,0.07); border-radius: 100px; overflow: hidden;
+    }
+    .fv-bar-fill { height: 100%; border-radius: 100px; }
+    .fv-bar-fill.warn { background: linear-gradient(90deg, #0ea5e9, #f59e0b); }
+    .fv-bar-fill.safe { background: linear-gradient(90deg, #0ea5e9, #22c55e); }
+    .fv-limit-note { font-size: 10.5px; color: rgba(255,255,255,0.3); margin-top: 7px; }
+    .fv-limit-note .hi { color: #f59e0b; font-weight: 600; }
+    .fv-limit-note .lo { color: #22c55e; font-weight: 600; }
+
+    /* ============================================================
+       FINAL CTA — identical to index.html
+    ============================================================ */
+    .final-cta { position: relative; background: #060d1a; overflow: hidden; }
+    .final-cta-glow {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 60%, rgba(14,165,233,0.09) 0%, transparent 70%);
+      z-index: 0;
+    }
+    .final-cta-inner {
+      position: relative; z-index: 1;
+      max-width: 700px; margin: 0 auto; text-align: center; padding: 120px 32px;
+    }
+    .final-cta-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 4vw, 48px); font-weight: 900;
+      color: #f8fafc; line-height: 1.1; margin-bottom: 20px; letter-spacing: -0.5px;
+    }
+    .final-cta-sub {
+      font-size: 18px; color: rgba(255,255,255,0.52); line-height: 1.65; margin-bottom: 44px;
+    }
+    .btn-cta-lg {
+      display: inline-flex; align-items: center; gap: 12px; padding: 20px 44px;
+      background: linear-gradient(135deg, #0ea5e9, #0369a1);
+      color: white; border-radius: 14px; font-size: 18px; font-weight: 700;
+      cursor: pointer; transition: all 0.25s;
+      box-shadow: 0 12px 36px rgba(14,165,233,0.40);
+    }
+    .btn-cta-lg:hover { transform: translateY(-3px); box-shadow: 0 20px 52px rgba(14,165,233,0.55); }
+    .cta-login-link { margin-top: 20px; font-size: 14px; color: rgba(255,255,255,0.45); }
+    .cta-login-link a {
+      color: #38bdf8; font-weight: 600;
+      text-decoration: underline; text-decoration-color: rgba(56,189,248,0.35);
+    }
+    .cta-login-link a:hover { color: #7dd3fc; }
+
+    /* ============================================================
+       FOOTER — identical to index.html
+    ============================================================ */
+    .footer {
+      background: #060d1a;
+      border-top: 1px solid rgba(56,189,248,0.07);
+      padding: 64px 32px 0;
+    }
+    .footer-main {
+      max-width: 1280px; margin: 0 auto;
+      display: grid; grid-template-columns: 2fr 1.5fr 1.5fr; gap: 56px;
+      padding-bottom: 48px;
+    }
+    .footer-brand   { font-family: 'Inter', sans-serif; font-size: 24px; font-weight: 800; color: #38bdf8; letter-spacing: -0.5px; margin-bottom: 12px; }
+    .footer-tagline { font-size: 14px; color: rgba(255,255,255,0.38); line-height: 1.6; max-width: 230px; }
+    .footer-col-title { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.32); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 18px; }
+    .footer-list { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+    .footer-list a { font-size: 14px; color: rgba(255,255,255,0.48); transition: color 0.2s; }
+    .footer-list a:hover { color: #38bdf8; }
+    .footer-bottom {
+      max-width: 1280px; margin: 0 auto;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 20px 0;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-copy  { font-size: 13px; color: rgba(255,255,255,0.28); }
+    .footer-legal { display: flex; gap: 20px; }
+    .footer-legal a { font-size: 13px; color: rgba(255,255,255,0.28); transition: color 0.2s; }
+    .footer-legal a:hover { color: #38bdf8; }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 900px) {
+      .rg-two-col { grid-template-columns: 1fr; gap: 48px; }
+      .fv-card    { max-width: 100%; }
+      .footer-main { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .nav-links   { display: none; }
+      .nav-actions { display: none; }
+      .hamburger   { display: flex; }
+      .nav-inner   { padding: 0 20px; }
+      .page-hero   { padding: 100px 20px 28px; }
+      .rg-section  { padding: 64px 20px; }
+      .footer-main { grid-template-columns: 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+      .footer-legal  { flex-wrap: wrap; justify-content: center; }
+      .final-cta-inner { padding: 80px 20px; }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ================================================================
+     NAVIGATION
+================================================================ -->
+<nav class="nav" id="mainNav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Casiflow</a>
+
+    <ul class="nav-links">
+      <li><a href="features.html">Features</a></li>
+      <li><a href="responsible-gambling.html" class="active">Responsible Gambling</a></li>
+      <li><a href="playbook.html">The Playbook</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <a href="https://app.casiflow.com/login"  class="btn-outline">Log In</a>
+      <a href="https://app.casiflow.com/signup" class="btn-teal">Sign Up</a>
+    </div>
+
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="features.html">Features</a>
+    <a href="responsible-gambling.html">Responsible Gambling</a>
+    <a href="playbook.html">The Playbook</a>
+    <a href="faq.html">FAQ</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <div class="mobile-menu-actions">
+      <a href="https://app.casiflow.com/login"  class="btn-outline">Log In</a>
+      <a href="https://app.casiflow.com/signup" class="btn-teal">Sign Up Free</a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ================================================================
+     PAGE HERO
+================================================================ -->
+<section class="page-hero">
+  <div class="fade-in">
+    <span class="page-hero-label">Responsible Gambling</span>
+    <h1 class="page-hero-headline">Smart players know their limits.</h1>
+    <p class="page-hero-sub">Casiflow gives you the tools to stay in control — across every casino you play at, all in one place.</p>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     SECTION 1 — Why Tracking Matters
+================================================================ -->
+<section class="rg-section mid">
+  <div class="rg-prose fade-in">
+    <span class="rg-label">Why It Matters</span>
+    <h2 class="rg-headline">What you don't know can cost you.</h2>
+    <p class="rg-copy">Most players don't have a clear picture of how much they've deposited, withdrawn or lost across all their casinos combined. Individual casinos show you your activity on their platform — but nobody shows you the full picture.</p>
+    <p class="rg-copy">That's where Casiflow comes in. When you can see your real numbers, you make better decisions. It's that simple.</p>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     SECTION 2 — How Casiflow Helps
+================================================================ -->
+<section class="rg-section dark">
+  <div class="rg-two-col">
+
+    <div class="fade-in">
+      <span class="rg-label">How Casiflow Helps</span>
+      <h2 class="rg-headline">Your limits, across every casino.</h2>
+      <p class="rg-copy">Most casinos let you set deposit and loss limits — but only at that casino. If you play at five different casinos, you'd need to manage five separate sets of limits. Casiflow solves this by letting you set one overarching monthly deposit limit and net loss limit that tracks your activity across every casino combined.</p>
+      <p class="rg-copy" style="margin-top:16px;">The moment you're approaching your limit, your dashboard tells you. Not one casino. All of them.</p>
+    </div>
+
+    <div class="fade-in delay-2" style="display:flex;align-items:center;justify-content:center;">
+      <div class="fv-card">
+        <div class="fv-card-header">
+          <span class="fv-card-title">Your Limits</span>
+          <span class="fv-card-badge">April 2026</span>
+        </div>
+
+        <div class="fv-limit-block">
+          <div class="fv-limit-header">
+            <span class="fv-limit-name">Monthly Deposit Limit</span>
+            <span class="fv-limit-vals"><span>€450</span> of €500</span>
+          </div>
+          <div class="fv-bar-track">
+            <div class="fv-bar-fill warn" style="width:90%;"></div>
+          </div>
+          <div class="fv-limit-note"><span class="hi">90% used</span> — €50 remaining this month</div>
+        </div>
+
+        <div style="height:20px;"></div>
+
+        <div class="fv-limit-block">
+          <div class="fv-limit-header">
+            <span class="fv-limit-name">Net Loss Limit</span>
+            <span class="fv-limit-vals"><span>€200</span> of €1,200</span>
+          </div>
+          <div class="fv-bar-track">
+            <div class="fv-bar-fill safe" style="width:17%;"></div>
+          </div>
+          <div class="fv-limit-note"><span class="lo">17% used</span> — well within your limit</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ================================================================
+     SECTION 3 — What Gambling Should Be
+================================================================ -->
+<section class="rg-section mid">
+  <div class="rg-prose fade-in">
+    <span class="rg-label">Perspective</span>
+    <h2 class="rg-headline">Gambling should add to your life. Not take from it.</h2>
+    <p class="rg-copy">At its best, gambling is entertainment. It's exciting, social and fun. The thrill of a big win, the tension of a close game, the enjoyment of playing your favourite slots. That's what it should be — a form of entertainment you enjoy within your means.</p>
+    <p class="rg-copy">Casiflow is built to help you keep it that way. Know your numbers, stay in control and make sure gambling stays exactly what it should be — something you enjoy.</p>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     SECTION 4 — How to Gamble Responsibly
+================================================================ -->
+<section class="rg-section dark">
+  <div class="rg-prose fade-in">
+    <span class="rg-label">Best Practices</span>
+    <h2 class="rg-headline">How to gamble responsibly.</h2>
+    <p class="rg-copy">Responsible gambling isn't just about gambling less — it's about gambling smarter and within your personal limits. A few simple habits can make all the difference:</p>
+
+    <ul class="rg-list">
+      <li>
+        <span class="bullet-icon check"><i class="fa-solid fa-check"></i></span>
+        Set a budget before you start each gambling session and stick to it
+      </li>
+      <li>
+        <span class="bullet-icon check"><i class="fa-solid fa-check"></i></span>
+        Only gamble with money you can afford to lose
+      </li>
+      <li>
+        <span class="bullet-icon check"><i class="fa-solid fa-check"></i></span>
+        Set a time limit for each session
+      </li>
+      <li>
+        <span class="bullet-icon check"><i class="fa-solid fa-check"></i></span>
+        Never gamble when stressed, upset or under the influence
+      </li>
+      <li>
+        <span class="bullet-icon check"><i class="fa-solid fa-check"></i></span>
+        Take regular breaks
+      </li>
+      <li>
+        <span class="bullet-icon check"><i class="fa-solid fa-check"></i></span>
+        Set monthly deposit and net loss limits that count across all casinos you play on
+      </li>
+      <li>
+        <span class="bullet-icon check"><i class="fa-solid fa-check"></i></span>
+        Use Casiflow's <a href="features.html" class="rg-teal-link">Goals feature</a> to set goals for each session — write them down, track your progress and keep yourself accountable
+      </li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     SECTION 5 — Warning Signs
+================================================================ -->
+<section class="rg-section mid">
+  <div class="rg-prose fade-in">
+    <span class="rg-label">Warning Signs</span>
+    <h2 class="rg-headline">Know the signs.</h2>
+    <p class="rg-copy">Gambling becomes a problem when it stops being fun and starts affecting other areas of your life. Some signs to watch out for:</p>
+
+    <ul class="rg-list">
+      <li>
+        <span class="bullet-icon warn"><i class="fa-solid fa-triangle-exclamation"></i></span>
+        Spending more than you planned or can afford
+      </li>
+      <li>
+        <span class="bullet-icon warn"><i class="fa-solid fa-triangle-exclamation"></i></span>
+        Chasing losses to try to win back money
+      </li>
+      <li>
+        <span class="bullet-icon warn"><i class="fa-solid fa-triangle-exclamation"></i></span>
+        Gambling to escape stress, anxiety or problems
+      </li>
+      <li>
+        <span class="bullet-icon warn"><i class="fa-solid fa-triangle-exclamation"></i></span>
+        Lying to others about how much you gamble
+      </li>
+      <li>
+        <span class="bullet-icon warn"><i class="fa-solid fa-triangle-exclamation"></i></span>
+        Neglecting work, relationships or responsibilities because of gambling
+      </li>
+      <li>
+        <span class="bullet-icon warn"><i class="fa-solid fa-triangle-exclamation"></i></span>
+        Feeling anxious or irritable when you're not gambling
+      </li>
+      <li>
+        <span class="bullet-icon warn"><i class="fa-solid fa-triangle-exclamation"></i></span>
+        Borrowing money to gamble
+      </li>
+    </ul>
+
+    <p class="rg-closing">If any of these feel familiar, it may be time to take a step back and seek support.</p>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     SECTION 6 — How To Seek Help
+================================================================ -->
+<section class="rg-section dark">
+  <div class="rg-prose fade-in">
+    <span class="rg-label">Seek Help</span>
+    <h2 class="rg-headline">You don't have to figure it out alone.</h2>
+    <p class="rg-copy">If you feel gambling is becoming a problem, here are some steps you can take:</p>
+
+    <ul class="rg-list">
+      <li>
+        <span class="bullet-icon arrow"><i class="fa-solid fa-arrow-right"></i></span>
+        Talk to someone you trust — a friend, family member or colleague
+      </li>
+      <li>
+        <span class="bullet-icon arrow"><i class="fa-solid fa-arrow-right"></i></span>
+        Contact your bank about setting up gambling transaction blocks
+      </li>
+      <li>
+        <span class="bullet-icon arrow"><i class="fa-solid fa-arrow-right"></i></span>
+        Use the self-exclusion tools available in your casino accounts
+      </li>
+      <li>
+        <span class="bullet-icon arrow"><i class="fa-solid fa-arrow-right"></i></span>
+        Exclude yourself from online gambling in the national self-exclusion registry
+      </li>
+      <li>
+        <span class="bullet-icon arrow"><i class="fa-solid fa-arrow-right"></i></span>
+        Visit your casino's responsible gambling section and set stricter limits
+      </li>
+      <li>
+        <span class="bullet-icon arrow"><i class="fa-solid fa-arrow-right"></i></span>
+        Search for gambling support services in your country — most countries have free, confidential helplines
+      </li>
+    </ul>
+
+    <p class="rg-closing">Taking the first step is the hardest part. But help is available and recovery is possible.</p>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     FINAL CTA
+================================================================ -->
+<section class="final-cta">
+  <div class="final-cta-glow"></div>
+  <div class="final-cta-inner fade-in">
+    <h2 class="final-cta-headline">Start tracking.<br>Stay in control.</h2>
+    <p class="final-cta-sub">Casiflow is free and takes minutes to set up.</p>
+    <a href="https://app.casiflow.com/signup" class="btn-cta-lg">
+      <i class="fa-solid fa-arrow-right"></i>
+      Create My Free Account
+    </a>
+    <p class="cta-login-link">Already have an account? <a href="https://app.casiflow.com/login">Log in</a></p>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     FOOTER
+================================================================ -->
+<footer class="footer">
+  <div class="footer-main">
+    <div>
+      <div class="footer-brand">Casiflow</div>
+      <p class="footer-tagline">The house tracks everything. So should you.</p>
+    </div>
+
+    <div>
+      <p class="footer-col-title">Navigation</p>
+      <ul class="footer-list">
+        <li><a href="features.html">Features</a></li>
+        <li><a href="responsible-gambling.html">Responsible Gambling</a></li>
+        <li><a href="playbook.html">The Playbook</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="footer-col-title">Legal</p>
+      <ul class="footer-list">
+        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+        <li><a href="terms.html">Terms &amp; Conditions</a></li>
+        <li><a href="responsible-gambling.html">Responsible Gambling</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="partner.html">Partner with us</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2026 Casiflow. All rights reserved.</p>
+    <div class="footer-legal">
+      <a href="privacy-policy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ================================================================
+     JAVASCRIPT
+================================================================ -->
+<script>
+  /* --- Nav scroll shadow --- */
+  const nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+  }, { passive: true });
+
+  /* --- Hamburger menu --- */
+  const hamburger  = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  hamburger.addEventListener('click', () => {
+    const open = mobileMenu.classList.toggle('open');
+    hamburger.classList.toggle('open', open);
+    hamburger.setAttribute('aria-expanded', open);
+  });
+
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      hamburger.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  /* --- Scroll-triggered fade-in via IntersectionObserver --- */
+  const fadeEls = document.querySelectorAll('.fade-in');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.10, rootMargin: '0px 0px -40px 0px' });
+
+  fadeEls.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

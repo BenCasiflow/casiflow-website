@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — Casiflow</title>
+  <meta name="description" content="Casiflow's Privacy Policy — how we collect, use, store and protect your personal data." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #0f172a;
+      color: #e2e8f0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; }
+
+    /* ============================================================
+       SCROLL ANIMATIONS
+    ============================================================ */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ============================================================
+       NAVIGATION
+    ============================================================ */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(6,13,26,0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+    }
+    .nav.scrolled {
+      border-bottom-color: rgba(56,189,248,0.12);
+      box-shadow: 0 4px 32px rgba(0,0,0,0.45);
+      background: rgba(6,13,26,0.97);
+    }
+    .nav-inner {
+      max-width: 1280px; margin: 0 auto; padding: 0 32px;
+      height: 68px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Inter', sans-serif;
+      font-size: 22px; font-weight: 800; color: #38bdf8;
+      letter-spacing: -0.5px; flex-shrink: 0;
+    }
+    .nav-links {
+      display: flex; align-items: center; gap: 28px; list-style: none;
+    }
+    .nav-links a {
+      color: rgba(255,255,255,0.68); font-size: 14px; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #38bdf8; }
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+
+    .btn-outline {
+      display: inline-block; padding: 8px 18px;
+      border: 1px solid rgba(56,189,248,0.4); border-radius: 8px;
+      color: #38bdf8; font-size: 14px; font-weight: 600;
+      background: transparent; cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .btn-outline:hover { background: rgba(56,189,248,0.08); border-color: #38bdf8; }
+
+    .btn-teal {
+      display: inline-block; padding: 9px 20px;
+      border: none; border-radius: 8px;
+      background: linear-gradient(135deg, #0ea5e9, #0369a1);
+      color: white; font-size: 14px; font-weight: 700; cursor: pointer;
+      transition: opacity 0.2s, box-shadow 0.2s, transform 0.2s;
+      box-shadow: 0 4px 12px rgba(14,165,233,0.3);
+    }
+    .btn-teal:hover {
+      opacity: 0.92; box-shadow: 0 6px 20px rgba(14,165,233,0.45);
+      transform: translateY(-1px);
+    }
+
+    /* Hamburger */
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 4px; background: none; border: none;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 2px; background: #e2e8f0;
+      border-radius: 2px; transition: all 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    /* Mobile menu */
+    .mobile-menu {
+      display: none; position: absolute; top: 68px; left: 0; right: 0;
+      background: rgba(6,13,26,0.98);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(56,189,248,0.1);
+      padding: 20px 28px 28px; flex-direction: column;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      display: block; padding: 13px 0; color: rgba(255,255,255,0.78);
+      font-size: 16px; font-weight: 500;
+      border-bottom: 1px solid rgba(255,255,255,0.06); transition: color 0.2s;
+    }
+    .mobile-menu a:last-of-type { border-bottom: none; }
+    .mobile-menu a:hover { color: #38bdf8; }
+    .mobile-menu-actions { display: flex; gap: 12px; padding-top: 20px; }
+    .mobile-menu-actions .btn-outline,
+    .mobile-menu-actions .btn-teal { flex: 1; text-align: center; }
+
+    /* ============================================================
+       PAGE HERO — compact inner-page variant
+    ============================================================ */
+    .page-hero {
+      background: #0f172a;
+      padding: 112px 32px 36px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(14,165,233,0.07) 0%, transparent 65%);
+      z-index: 0;
+    }
+    .page-hero-inner {
+      position: relative; z-index: 1;
+      max-width: 640px; margin: 0 auto;
+    }
+    .section-label {
+      display: inline-block; font-size: 11px; font-weight: 700; color: #0ea5e9;
+      letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 16px;
+    }
+    .page-hero-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 2.2vw, 2.5rem);
+      font-weight: 900; color: #f8fafc; line-height: 1.12;
+      letter-spacing: -0.5px; margin-bottom: 12px;
+    }
+    .page-hero-sub {
+      font-size: 14px; color: rgba(255,255,255,0.38);
+      font-style: italic; letter-spacing: 0.2px;
+    }
+
+    /* ============================================================
+       POLICY CONTENT
+    ============================================================ */
+    .policy-section {
+      background: #0b1628;
+      padding: 64px 32px 96px;
+    }
+    .policy-inner {
+      max-width: 800px; margin: 0 auto;
+    }
+
+    /* Section blocks */
+    .policy-block {
+      margin-bottom: 48px;
+    }
+    .policy-block:last-child { margin-bottom: 0; }
+
+    .policy-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(18px, 2vw, 22px); font-weight: 700;
+      color: #f8fafc; line-height: 1.2; margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(56,189,248,0.1);
+    }
+
+    .policy-body p {
+      font-size: 15.5px; color: rgba(255,255,255,0.62);
+      line-height: 1.85; margin-bottom: 16px;
+    }
+    .policy-body p:last-child { margin-bottom: 0; }
+
+    .policy-body a {
+      color: #38bdf8; text-decoration: underline;
+      text-decoration-color: rgba(56,189,248,0.35);
+      transition: color 0.2s, text-decoration-color 0.2s;
+    }
+    .policy-body a:hover {
+      color: #7dd3fc;
+      text-decoration-color: rgba(125,211,252,0.5);
+    }
+
+    /* Processor list (section 6) */
+    .processor-list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 20px;
+      margin-top: 8px;
+    }
+    .processor-item {
+      padding: 18px 20px;
+      background: rgba(30,41,59,0.5);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-left: 3px solid rgba(56,189,248,0.4);
+      border-radius: 10px;
+    }
+    .processor-name {
+      font-size: 14px; font-weight: 700; color: #f1f5f9;
+      margin-bottom: 6px;
+    }
+    .processor-desc {
+      font-size: 14px; color: rgba(255,255,255,0.52); line-height: 1.7;
+      margin: 0;
+    }
+    .processor-desc a {
+      color: #38bdf8; text-decoration: underline;
+      text-decoration-color: rgba(56,189,248,0.35);
+    }
+    .processor-desc a:hover { color: #7dd3fc; }
+
+    /* Purpose / legal basis table (section 4) */
+    .policy-table-wrap {
+      overflow-x: auto; margin: 16px 0 20px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .policy-table {
+      width: 100%; border-collapse: collapse;
+    }
+    .policy-table thead th {
+      background: rgba(14,165,233,0.1);
+      padding: 13px 18px;
+      font-size: 11px; font-weight: 700; color: #38bdf8;
+      text-transform: uppercase; letter-spacing: 1.5px;
+      text-align: left;
+      border-bottom: 1px solid rgba(56,189,248,0.18);
+    }
+    .policy-table tbody tr {
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      transition: background 0.15s;
+    }
+    .policy-table tbody tr:last-child { border-bottom: none; }
+    .policy-table tbody tr:hover { background: rgba(30,41,59,0.4); }
+    .policy-table tbody td {
+      padding: 13px 18px;
+      font-size: 14px; color: rgba(255,255,255,0.62); line-height: 1.6;
+      vertical-align: top;
+    }
+    .policy-table tbody td:last-child {
+      color: rgba(255,255,255,0.42);
+      white-space: nowrap;
+    }
+
+    /* Teal bullet rights list (section 10) */
+    .rights-list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 13px;
+      margin: 16px 0 20px;
+    }
+    .rights-list li {
+      display: flex; align-items: flex-start; gap: 12px;
+      font-size: 15px; color: rgba(255,255,255,0.62); line-height: 1.65;
+    }
+    .rights-list li::before {
+      content: '';
+      display: inline-block;
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #0ea5e9;
+      flex-shrink: 0;
+      margin-top: 8px;
+    }
+    .rights-list li strong {
+      color: rgba(255,255,255,0.85); font-weight: 600;
+    }
+
+    /* Inline emphasis / "no-sell" note */
+    .policy-note {
+      background: rgba(14,165,233,0.06);
+      border: 1px solid rgba(56,189,248,0.16);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin: 16px 0 0;
+    }
+    .policy-note p {
+      font-size: 14px; color: rgba(255,255,255,0.65); line-height: 1.7;
+      margin-bottom: 6px;
+    }
+    .policy-note p:last-child { margin-bottom: 0; }
+
+    /* Contact block at the end */
+    .contact-block {
+      margin-top: 16px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .contact-block p {
+      font-size: 15px; color: rgba(255,255,255,0.62); line-height: 1.6;
+      margin: 0;
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    .footer {
+      background: #060d1a;
+      border-top: 1px solid rgba(56,189,248,0.07);
+      padding: 64px 32px 0;
+    }
+    .footer-main {
+      max-width: 1280px; margin: 0 auto;
+      display: grid; grid-template-columns: 2fr 1.5fr 1.5fr; gap: 56px;
+      padding-bottom: 48px;
+    }
+    .footer-brand { font-family: 'Inter', sans-serif; font-size: 24px; font-weight: 800; color: #38bdf8; letter-spacing: -0.5px; margin-bottom: 12px; }
+    .footer-tagline { font-size: 14px; color: rgba(255,255,255,0.38); line-height: 1.6; max-width: 230px; }
+    .footer-col-title { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.32); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 18px; }
+    .footer-list { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+    .footer-list a { font-size: 14px; color: rgba(255,255,255,0.48); transition: color 0.2s; }
+    .footer-list a:hover { color: #38bdf8; }
+    .footer-bottom {
+      max-width: 1280px; margin: 0 auto;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 20px 0;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-copy { font-size: 13px; color: rgba(255,255,255,0.28); }
+    .footer-legal { display: flex; gap: 20px; }
+    .footer-legal a { font-size: 13px; color: rgba(255,255,255,0.28); transition: color 0.2s; }
+    .footer-legal a:hover { color: #38bdf8; }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 960px) {
+      .footer-main { grid-template-columns: 1fr 1fr; }
+      .policy-table tbody td:last-child { white-space: normal; }
+    }
+    @media (max-width: 768px) {
+      .nav-links   { display: none; }
+      .nav-actions { display: none; }
+      .hamburger   { display: flex; }
+      .nav-inner   { padding: 0 20px; }
+      .page-hero   { padding: 100px 20px 28px; }
+      .page-hero-headline { font-size: 1.8rem; }
+      .policy-section { padding: 48px 20px 72px; }
+      .policy-heading { font-size: 18px; }
+      .footer-main { grid-template-columns: 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+      .footer-legal { flex-wrap: wrap; justify-content: center; }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ================================================================
+     NAVIGATION
+================================================================ -->
+<nav class="nav" id="mainNav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Casiflow</a>
+
+    <ul class="nav-links">
+      <li><a href="features.html">Features</a></li>
+      <li><a href="responsible-gambling.html">Responsible Gambling</a></li>
+      <li><a href="playbook.html">The Playbook</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <a href="https://app.casiflow.com/login"  class="btn-outline">Log In</a>
+      <a href="https://app.casiflow.com/signup" class="btn-teal">Sign Up</a>
+    </div>
+
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="features.html">Features</a>
+    <a href="responsible-gambling.html">Responsible Gambling</a>
+    <a href="playbook.html">The Playbook</a>
+    <a href="faq.html">FAQ</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <div class="mobile-menu-actions">
+      <a href="https://app.casiflow.com/login"  class="btn-outline">Log In</a>
+      <a href="https://app.casiflow.com/signup" class="btn-teal">Sign Up Free</a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ================================================================
+     PAGE HERO
+================================================================ -->
+<section class="page-hero">
+  <div class="page-hero-inner fade-in">
+    <span class="section-label">Legal</span>
+    <h1 class="page-hero-headline">Privacy Policy</h1>
+    <p class="page-hero-sub">Last updated: April 2026</p>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     POLICY CONTENT
+================================================================ -->
+<section class="policy-section">
+  <div class="policy-inner fade-in">
+
+    <!-- 1. Introduction -->
+    <div class="policy-block">
+      <h2 class="policy-heading">1. Introduction</h2>
+      <div class="policy-body">
+        <p>This Privacy Policy explains how Casiflow ("we", "us", "our") collects, uses, stores and protects your personal data when you use our website at <a href="https://www.casiflow.com">www.casiflow.com</a> and our web application at <a href="https://app.casiflow.com">app.casiflow.com</a> (together, "the Service").</p>
+        <p>We are committed to protecting your privacy and handling your data responsibly and transparently. Please read this policy carefully before using the Service.</p>
+      </div>
+    </div>
+
+    <!-- 2. Who We Are -->
+    <div class="policy-block">
+      <h2 class="policy-heading">2. Who We Are</h2>
+      <div class="policy-body">
+        <p>Casiflow is operated under the name Casiflow. For any privacy related enquiries please contact us at <a href="mailto:support@casiflow.com">support@casiflow.com</a>.</p>
+      </div>
+    </div>
+
+    <!-- 3. Data We Collect -->
+    <div class="policy-block">
+      <h2 class="policy-heading">3. Data We Collect</h2>
+      <div class="policy-body">
+        <p>We collect the following personal data when you register and use Casiflow:</p>
+        <ul class="rights-list" style="margin-bottom:0;">
+          <li><span><strong>Account data:</strong> your name, email address, date of birth, country of residence and currency preference.</span></li>
+          <li><span><strong>Gambling activity data:</strong> casino transaction data you manually enter or upload, including deposits, withdrawals and account balances across the casinos you add to your account.</span></li>
+          <li><span><strong>Settings data:</strong> spending limits, net loss limits, budget goals and other preferences you configure within the Service. Your net income is only collected if you voluntarily choose to share it with us. This information is never shared and is used solely to help you see what percentage of your income is spent on gambling.</span></li>
+          <li><span><strong>Usage data:</strong> information about how you use the Service, including login times, features used and pages visited.</span></li>
+          <li><span><strong>Communications data:</strong> any messages or feedback you send us via the contact form or by email.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 4. How We Use Your Data -->
+    <div class="policy-block">
+      <h2 class="policy-heading">4. How We Use Your Data</h2>
+      <div class="policy-body">
+        <p>We use your personal data for the following purposes and on the following legal bases:</p>
+        <div class="policy-table-wrap">
+          <table class="policy-table">
+            <thead>
+              <tr>
+                <th>Purpose</th>
+                <th>Legal Basis</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>To provide and operate the Casiflow Service</td>
+                <td>Performance of a contract</td>
+              </tr>
+              <tr>
+                <td>To display your gambling dashboard and calculate your net results</td>
+                <td>Performance of a contract</td>
+              </tr>
+              <tr>
+                <td>To send you account-related notifications and alerts</td>
+                <td>Performance of a contract</td>
+              </tr>
+              <tr>
+                <td>To respond to your enquiries and support requests</td>
+                <td>Legitimate interests</td>
+              </tr>
+              <tr>
+                <td>To improve and develop the Service</td>
+                <td>Legitimate interests</td>
+              </tr>
+              <tr>
+                <td>To comply with legal obligations</td>
+                <td>Legal obligation</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="policy-note">
+          <p>We do not sell your personal data to third parties.</p>
+          <p>We do not share your data with casinos.</p>
+          <p>We do not use your data for advertising purposes.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Affiliate Disclosure -->
+    <div class="policy-block">
+      <h2 class="policy-heading">5. Affiliate Disclosure</h2>
+      <div class="policy-body">
+        <p>Casiflow may earn affiliate commission when users sign up to casino operators through links displayed within the Service. This is disclosed transparently and does not affect the data or insights we show you. We do not share your personal data with affiliate partners.</p>
+      </div>
+    </div>
+
+    <!-- 6. Third Party Data Processors -->
+    <div class="policy-block">
+      <h2 class="policy-heading">6. Third Party Data Processors</h2>
+      <div class="policy-body">
+        <p>We use the following third party services to operate the Service. These providers process your data on our behalf and are bound by appropriate data processing agreements:</p>
+        <ul class="processor-list">
+          <li class="processor-item">
+            <p class="processor-name">Supabase</p>
+            <p class="processor-desc">Database and authentication provider. Your account data and gambling activity data is stored on Supabase's infrastructure. Supabase is SOC 2 compliant and stores data in secure, encrypted form. For more information visit <a href="https://supabase.com/privacy" target="_blank" rel="noopener">supabase.com/privacy</a>.</p>
+          </li>
+          <li class="processor-item">
+            <p class="processor-name">Vercel</p>
+            <p class="processor-desc">Website and application hosting provider. For more information visit <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener">vercel.com/legal/privacy-policy</a>.</p>
+          </li>
+          <li class="processor-item">
+            <p class="processor-name">Resend</p>
+            <p class="processor-desc">Email delivery service used to send account notifications and transactional emails. For more information visit <a href="https://resend.com/privacy" target="_blank" rel="noopener">resend.com/privacy</a>.</p>
+          </li>
+        </ul>
+        <p style="margin-top:16px;">We will update this section if we add additional third party processors.</p>
+      </div>
+    </div>
+
+    <!-- 7. International Data Transfers -->
+    <div class="policy-block">
+      <h2 class="policy-heading">7. International Data Transfers</h2>
+      <div class="policy-body">
+        <p>Some of our third party processors may store or process your data outside the European Economic Area (EEA) or United Kingdom. Where this occurs we ensure appropriate safeguards are in place, including Standard Contractual Clauses approved by the European Commission, to protect your data in accordance with GDPR requirements.</p>
+      </div>
+    </div>
+
+    <!-- 8. Data Retention -->
+    <div class="policy-block">
+      <h2 class="policy-heading">8. Data Retention</h2>
+      <div class="policy-body">
+        <p>We retain your personal data for as long as your account is active. If you delete your account we will delete your personal data within 30 days, except where we are required to retain it for legal or compliance purposes.</p>
+        <p>Usage and analytics data may be retained in anonymised form for longer periods for the purpose of improving the Service.</p>
+      </div>
+    </div>
+
+    <!-- 9. Cookies -->
+    <div class="policy-block">
+      <h2 class="policy-heading">9. Cookies</h2>
+      <div class="policy-body">
+        <p>Casiflow uses only essential cookies that are strictly necessary for the Service to function. These cookies cannot be disabled without affecting the functionality of the Service.</p>
+        <p>We do not use advertising cookies, tracking cookies or any third party analytics cookies.</p>
+        <p>For more information about the cookies we use please see our Cookie Policy.</p>
+      </div>
+    </div>
+
+    <!-- 10. Your Rights Under GDPR -->
+    <div class="policy-block">
+      <h2 class="policy-heading">10. Your Rights Under GDPR</h2>
+      <div class="policy-body">
+        <p>If you are based in the European Union or United Kingdom you have the following rights regarding your personal data:</p>
+        <ul class="rights-list">
+          <li><span><strong>Right of access</strong> — you have the right to request a copy of the personal data we hold about you.</span></li>
+          <li><span><strong>Right to rectification</strong> — you have the right to request correction of inaccurate or incomplete data.</span></li>
+          <li><span><strong>Right to erasure</strong> — you have the right to request deletion of your personal data.</span></li>
+          <li><span><strong>Right to data portability</strong> — you have the right to receive your data in a structured, machine-readable format.</span></li>
+          <li><span><strong>Right to object</strong> — you have the right to object to certain types of processing of your data.</span></li>
+          <li><span><strong>Right to restrict processing</strong> — you have the right to request that we restrict how we use your data.</span></li>
+          <li><span><strong>Right to withdraw consent</strong> — where processing is based on consent you have the right to withdraw that consent at any time.</span></li>
+        </ul>
+        <p>You can exercise your rights at any time by visiting your Profile page under My Data, or by contacting us at <a href="mailto:support@casiflow.com">support@casiflow.com</a>.</p>
+      </div>
+    </div>
+
+    <!-- 11. Right to Lodge a Complaint -->
+    <div class="policy-block">
+      <h2 class="policy-heading">11. Right to Lodge a Complaint</h2>
+      <div class="policy-body">
+        <p>If you are unhappy with how we handle your personal data you have the right to lodge a complaint with your local data protection supervisory authority. In Malta this is the Information and Data Protection Commissioner (<a href="https://idpc.org.mt" target="_blank" rel="noopener">idpc.org.mt</a>). We do, however, recommend that you first contact us so that we can address and/or answer your questions, concerns, or issues before you refer the matter to the supervisory authority.</p>
+      </div>
+    </div>
+
+    <!-- 12. Data Security -->
+    <div class="policy-block">
+      <h2 class="policy-heading">12. Data Security</h2>
+      <div class="policy-body">
+        <p>We implement appropriate technical and organisational measures to protect your personal data against unauthorised access, loss, destruction or alteration. All data is stored in encrypted form. Access to personal data is restricted to authorised personnel only.</p>
+        <p>Despite these measures no method of transmission over the internet or electronic storage is completely secure. We cannot guarantee absolute security but we are committed to protecting your data to the highest standard.</p>
+      </div>
+    </div>
+
+    <!-- 13. Children -->
+    <div class="policy-block">
+      <h2 class="policy-heading">13. Children</h2>
+      <div class="policy-body">
+        <p>Casiflow is not intended for use by anyone under the age of 18. We do not knowingly collect personal data from anyone under 18. If you believe we have inadvertently collected data from a minor please contact us immediately at <a href="mailto:support@casiflow.com">support@casiflow.com</a> and we will delete it promptly.</p>
+      </div>
+    </div>
+
+    <!-- 14. Links to Third Party Websites -->
+    <div class="policy-block">
+      <h2 class="policy-heading">14. Links to Third Party Websites</h2>
+      <div class="policy-body">
+        <p>The Service may contain links to third party websites including responsible gambling organisations and casino operators. We are not responsible for the privacy practices or content of those websites. We encourage you to read their privacy policies before providing any personal data.</p>
+      </div>
+    </div>
+
+    <!-- 15. Changes to This Policy -->
+    <div class="policy-block">
+      <h2 class="policy-heading">15. Changes to This Policy</h2>
+      <div class="policy-body">
+        <p>We may update this Privacy Policy from time to time to reflect changes in our practices or legal requirements. We will notify you of any significant changes by email or through the Service. The date at the top of this policy indicates when it was last updated. Your continued use of the Service after any changes constitutes your acceptance of the updated policy.</p>
+      </div>
+    </div>
+
+    <!-- 16. Contact -->
+    <div class="policy-block">
+      <h2 class="policy-heading">16. Contact</h2>
+      <div class="policy-body">
+        <p>If you have any questions about this Privacy Policy or how we handle your personal data please contact us at:</p>
+        <div class="contact-block">
+          <p>Email: <a href="mailto:support@casiflow.com">support@casiflow.com</a></p>
+          <p>Website: <a href="contact.html">www.casiflow.com/contact</a></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ================================================================
+     FOOTER
+================================================================ -->
+<footer class="footer">
+  <div class="footer-main">
+    <div>
+      <div class="footer-brand">Casiflow</div>
+      <p class="footer-tagline">The house tracks everything. So should you.</p>
+    </div>
+
+    <div>
+      <p class="footer-col-title">Navigation</p>
+      <ul class="footer-list">
+        <li><a href="features.html">Features</a></li>
+        <li><a href="responsible-gambling.html">Responsible Gambling</a></li>
+        <li><a href="playbook.html">The Playbook</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="footer-col-title">Legal</p>
+      <ul class="footer-list">
+        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+        <li><a href="terms.html">Terms &amp; Conditions</a></li>
+        <li><a href="responsible-gambling.html">Responsible Gambling</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="partner.html">Partner with us</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2026 Casiflow. All rights reserved.</p>
+    <div class="footer-legal">
+      <a href="privacy-policy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ================================================================
+     JAVASCRIPT
+================================================================ -->
+<script>
+  /* --- Nav scroll shadow --- */
+  const nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+  }, { passive: true });
+
+  /* --- Hamburger menu --- */
+  const hamburger  = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  hamburger.addEventListener('click', () => {
+    const open = mobileMenu.classList.toggle('open');
+    hamburger.classList.toggle('open', open);
+    hamburger.setAttribute('aria-expanded', open);
+  });
+
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      hamburger.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  /* --- Page load fade-in --- */
+  document.querySelectorAll('.fade-in').forEach(el => {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -30px 0px' });
+    io.observe(el);
+  });
+</script>
+
+</body>
+</html>

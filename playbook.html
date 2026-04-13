@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Playbook — Casiflow</title>
+  <meta name="description" content="Strategy, insights and guides for players who take their gambling seriously." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #0f172a;
+      color: #e2e8f0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; }
+
+    /* ============================================================
+       SCROLL ANIMATIONS
+    ============================================================ */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+    .delay-1 { transition-delay: 0.10s; }
+    .delay-2 { transition-delay: 0.20s; }
+    .delay-3 { transition-delay: 0.30s; }
+
+    /* ============================================================
+       NAVIGATION — identical to index.html
+    ============================================================ */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(6,13,26,0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+    }
+    .nav.scrolled {
+      border-bottom-color: rgba(56,189,248,0.12);
+      box-shadow: 0 4px 32px rgba(0,0,0,0.45);
+      background: rgba(6,13,26,0.97);
+    }
+    .nav-inner {
+      max-width: 1280px; margin: 0 auto; padding: 0 32px;
+      height: 68px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Inter', sans-serif;
+      font-size: 22px; font-weight: 800; color: #38bdf8;
+      letter-spacing: -0.5px; flex-shrink: 0;
+    }
+    .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+    .nav-links a {
+      color: rgba(255,255,255,0.68); font-size: 14px; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover  { color: #38bdf8; }
+    .nav-links a.active { color: #38bdf8; }
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+    .btn-outline {
+      display: inline-block; padding: 8px 18px;
+      border: 1px solid rgba(56,189,248,0.4); border-radius: 8px;
+      color: #38bdf8; font-size: 14px; font-weight: 600;
+      background: transparent; cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .btn-outline:hover { background: rgba(56,189,248,0.08); border-color: #38bdf8; }
+    .btn-teal {
+      display: inline-block; padding: 9px 20px;
+      border: none; border-radius: 8px;
+      background: linear-gradient(135deg, #0ea5e9, #0369a1);
+      color: white; font-size: 14px; font-weight: 700; cursor: pointer;
+      transition: opacity 0.2s, box-shadow 0.2s, transform 0.2s;
+      box-shadow: 0 4px 12px rgba(14,165,233,0.3);
+    }
+    .btn-teal:hover {
+      opacity: 0.92; box-shadow: 0 6px 20px rgba(14,165,233,0.45);
+      transform: translateY(-1px);
+    }
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 4px; background: none; border: none;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 2px; background: #e2e8f0;
+      border-radius: 2px; transition: all 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+    .mobile-menu {
+      display: none; position: absolute; top: 68px; left: 0; right: 0;
+      background: rgba(6,13,26,0.98);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(56,189,248,0.1);
+      padding: 20px 28px 28px; flex-direction: column;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      display: block; padding: 13px 0; color: rgba(255,255,255,0.78);
+      font-size: 16px; font-weight: 500;
+      border-bottom: 1px solid rgba(255,255,255,0.06); transition: color 0.2s;
+    }
+    .mobile-menu a:last-of-type { border-bottom: none; }
+    .mobile-menu a:hover { color: #38bdf8; }
+    .mobile-menu-actions { display: flex; gap: 12px; padding-top: 20px; }
+    .mobile-menu-actions .btn-outline,
+    .mobile-menu-actions .btn-teal { flex: 1; text-align: center; }
+
+    /* ============================================================
+       PAGE HERO — compact, diagonal texture
+    ============================================================ */
+    .page-hero {
+      padding: 112px 32px 36px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      /* Diagonal line texture for "strategy document" feel */
+      background-color: #0f172a;
+      background-image:
+        repeating-linear-gradient(
+          -45deg,
+          transparent,
+          transparent 20px,
+          rgba(56,189,248,0.022) 20px,
+          rgba(56,189,248,0.022) 21px
+        );
+    }
+    /* Radial glow to lift the content area */
+    .page-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 110%, rgba(14,165,233,0.10) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    /* Fade the texture at top and bottom */
+    .page-hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(to bottom, #0f172a 0%, transparent 30%, transparent 70%, #0b1628 100%);
+      pointer-events: none;
+    }
+    .page-hero-inner {
+      position: relative; z-index: 1;
+    }
+    .page-hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 12px; font-weight: 700; color: #38bdf8;
+      letter-spacing: 3px; text-transform: uppercase; margin-bottom: 18px;
+    }
+    .page-hero-eyebrow-line {
+      display: inline-block; width: 28px; height: 1px; background: #38bdf8; opacity: 0.5;
+    }
+    .page-hero-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 2.2vw, 2.5rem); font-weight: 900;
+      color: #f8fafc; line-height: 1.14; letter-spacing: -0.3px;
+      margin-bottom: 16px; max-width: 640px; margin-left: auto; margin-right: auto;
+    }
+    .page-hero-sub {
+      font-size: 17px; color: rgba(255,255,255,0.55); line-height: 1.7;
+      max-width: 500px; margin: 0 auto;
+    }
+
+    /* ============================================================
+       CATEGORY FILTER BAR
+    ============================================================ */
+    .filter-bar {
+      background: #0b1628;
+      padding: 24px 32px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .filter-bar-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 8px 20px; border-radius: 100px;
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(30,41,59,0.6);
+      color: rgba(255,255,255,0.48);
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+      font-family: 'Inter', sans-serif;
+      line-height: 1;
+    }
+    .filter-btn:hover {
+      background: rgba(56,189,248,0.08);
+      border-color: rgba(56,189,248,0.3);
+      color: rgba(255,255,255,0.75);
+    }
+    .filter-btn.active {
+      background: #0ea5e9;
+      border-color: #0ea5e9;
+      color: white;
+      box-shadow: 0 2px 10px rgba(14,165,233,0.3);
+    }
+
+    /* ============================================================
+       POST GRID SECTION
+    ============================================================ */
+    .posts-section {
+      background: #0b1628;
+      padding: 52px 32px 96px;
+    }
+    .posts-inner {
+      max-width: 1100px; margin: 0 auto;
+      transition: opacity 0.18s ease;
+    }
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    /* Individual post card */
+    .post-card {
+      background: #0f172a;
+      border: 1px solid rgba(56,189,248,0.09);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    }
+    .post-card:hover {
+      border-color: rgba(56,189,248,0.32);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(56,189,248,0.12);
+    }
+
+    /* Card header — gradient visual placeholder */
+    .post-card-header {
+      height: 130px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    /* Large ghosted category text behind the icon */
+    .post-card-header-bg-text {
+      position: absolute;
+      font-family: 'Playfair Display', serif;
+      font-size: 72px; font-weight: 900;
+      color: rgba(56,189,248,0.05);
+      letter-spacing: -3px;
+      user-select: none; pointer-events: none;
+      white-space: nowrap;
+    }
+    .post-card-header-icon {
+      position: relative; z-index: 1;
+      width: 56px; height: 56px; border-radius: 14px;
+      background: rgba(56,189,248,0.1); border: 1px solid rgba(56,189,248,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; color: #38bdf8;
+    }
+
+    /* Strategy gradient */
+    .post-card-header.strategy {
+      background: linear-gradient(135deg, #060e1e 0%, #0f1f38 100%);
+    }
+    /* Tracking gradient — slight teal tint */
+    .post-card-header.tracking {
+      background: linear-gradient(135deg, #060e1e 0%, #082030 100%);
+    }
+    /* Responsible Gambling gradient — slight purple tint */
+    .post-card-header.responsible {
+      background: linear-gradient(135deg, #060e1e 0%, #100d28 100%);
+    }
+
+    /* Card body */
+    .post-card-body {
+      padding: 24px; flex: 1; display: flex; flex-direction: column;
+    }
+    .post-card-cat {
+      font-size: 10px; font-weight: 700; color: #0ea5e9;
+      letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px;
+    }
+    .post-card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px; font-weight: 700; color: #f8fafc;
+      line-height: 1.3; margin-bottom: 12px;
+    }
+    .post-card-excerpt {
+      font-size: 14px; color: rgba(255,255,255,0.48);
+      line-height: 1.7; flex: 1; margin-bottom: 20px;
+    }
+    .post-card-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .post-card-date { font-size: 12px; color: rgba(255,255,255,0.3); font-weight: 500; }
+    .post-card-link {
+      font-size: 13px; font-weight: 700; color: #38bdf8;
+      display: inline-flex; align-items: center; gap: 6px;
+      transition: gap 0.2s, color 0.2s;
+    }
+    .post-card-link:hover { gap: 10px; color: #7dd3fc; }
+    .post-card-link i { font-size: 11px; }
+
+    /* Empty state when no posts match filter */
+    .posts-empty {
+      display: none;
+      text-align: center; padding: 64px 32px;
+      color: rgba(255,255,255,0.32); font-size: 15px;
+    }
+    .posts-empty i { display: block; font-size: 36px; margin-bottom: 16px; opacity: 0.3; }
+
+    /* ============================================================
+       FINAL CTA — identical to index.html
+    ============================================================ */
+    .final-cta { position: relative; background: #060d1a; overflow: hidden; }
+    .final-cta-glow {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 60%, rgba(14,165,233,0.09) 0%, transparent 70%);
+      z-index: 0;
+    }
+    .final-cta-inner {
+      position: relative; z-index: 1;
+      max-width: 700px; margin: 0 auto; text-align: center; padding: 120px 32px;
+    }
+    .final-cta-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 4vw, 48px); font-weight: 900;
+      color: #f8fafc; line-height: 1.1; margin-bottom: 20px; letter-spacing: -0.5px;
+    }
+    .final-cta-sub {
+      font-size: 18px; color: rgba(255,255,255,0.52); line-height: 1.65; margin-bottom: 44px;
+    }
+    .btn-cta-lg {
+      display: inline-flex; align-items: center; gap: 12px; padding: 20px 44px;
+      background: linear-gradient(135deg, #0ea5e9, #0369a1);
+      color: white; border-radius: 14px; font-size: 18px; font-weight: 700;
+      cursor: pointer; transition: all 0.25s;
+      box-shadow: 0 12px 36px rgba(14,165,233,0.40);
+    }
+    .btn-cta-lg:hover { transform: translateY(-3px); box-shadow: 0 20px 52px rgba(14,165,233,0.55); }
+    .cta-login-link { margin-top: 20px; font-size: 14px; color: rgba(255,255,255,0.45); }
+    .cta-login-link a {
+      color: #38bdf8; font-weight: 600;
+      text-decoration: underline; text-decoration-color: rgba(56,189,248,0.35);
+    }
+    .cta-login-link a:hover { color: #7dd3fc; }
+
+    /* ============================================================
+       FOOTER — identical to index.html
+    ============================================================ */
+    .footer {
+      background: #060d1a;
+      border-top: 1px solid rgba(56,189,248,0.07);
+      padding: 64px 32px 0;
+    }
+    .footer-main {
+      max-width: 1280px; margin: 0 auto;
+      display: grid; grid-template-columns: 2fr 1.5fr 1.5fr; gap: 56px;
+      padding-bottom: 48px;
+    }
+    .footer-brand   { font-family: 'Inter', sans-serif; font-size: 24px; font-weight: 800; color: #38bdf8; letter-spacing: -0.5px; margin-bottom: 12px; }
+    .footer-tagline { font-size: 14px; color: rgba(255,255,255,0.38); line-height: 1.6; max-width: 230px; }
+    .footer-col-title { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.32); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 18px; }
+    .footer-list { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+    .footer-list a { font-size: 14px; color: rgba(255,255,255,0.48); transition: color 0.2s; }
+    .footer-list a:hover { color: #38bdf8; }
+    .footer-bottom {
+      max-width: 1280px; margin: 0 auto;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 20px 0;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-copy  { font-size: 13px; color: rgba(255,255,255,0.28); }
+    .footer-legal { display: flex; gap: 20px; }
+    .footer-legal a { font-size: 13px; color: rgba(255,255,255,0.28); transition: color 0.2s; }
+    .footer-legal a:hover { color: #38bdf8; }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 1024px) {
+      .posts-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .nav-links   { display: none; }
+      .nav-actions { display: none; }
+      .hamburger   { display: flex; }
+      .nav-inner   { padding: 0 20px; }
+      .page-hero   { padding: 100px 20px 28px; }
+      .page-hero-headline { font-size: 1.8rem; }
+      .filter-bar  { padding: 20px; }
+      .posts-section { padding: 40px 20px 72px; }
+      .posts-grid  { grid-template-columns: 1fr; }
+      .footer-main { grid-template-columns: 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+      .footer-legal  { flex-wrap: wrap; justify-content: center; }
+      .final-cta-inner { padding: 80px 20px; }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ================================================================
+     NAVIGATION
+================================================================ -->
+<nav class="nav" id="mainNav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Casiflow</a>
+
+    <ul class="nav-links">
+      <li><a href="features.html">Features</a></li>
+      <li><a href="responsible-gambling.html">Responsible Gambling</a></li>
+      <li><a href="playbook.html" class="active">The Playbook</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <a href="https://app.casiflow.com/login"  class="btn-outline">Log In</a>
+      <a href="https://app.casiflow.com/signup" class="btn-teal">Sign Up</a>
+    </div>
+
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="features.html">Features</a>
+    <a href="responsible-gambling.html">Responsible Gambling</a>
+    <a href="playbook.html">The Playbook</a>
+    <a href="faq.html">FAQ</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <div class="mobile-menu-actions">
+      <a href="https://app.casiflow.com/login"  class="btn-outline">Log In</a>
+      <a href="https://app.casiflow.com/signup" class="btn-teal">Sign Up Free</a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ================================================================
+     PAGE HERO
+================================================================ -->
+<section class="page-hero">
+  <div class="page-hero-inner fade-in">
+    <div class="page-hero-eyebrow">
+      <span class="page-hero-eyebrow-line"></span>
+      The Playbook
+      <span class="page-hero-eyebrow-line"></span>
+    </div>
+    <h1 class="page-hero-headline">Your edge starts here.</h1>
+    <p class="page-hero-sub">Strategy, insights and guides for players who take their gambling seriously.</p>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     CATEGORY FILTER BAR
+================================================================ -->
+<div class="filter-bar">
+  <div class="filter-bar-inner">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="strategy">Strategy</button>
+    <button class="filter-btn" data-filter="tracking">Tracking</button>
+    <button class="filter-btn" data-filter="responsible">Responsible Gambling</button>
+  </div>
+</div>
+
+
+<!-- ================================================================
+     BLOG POST GRID
+================================================================ -->
+<section class="posts-section">
+  <div class="posts-inner" id="postsInner">
+    <div class="posts-grid" id="postsGrid">
+
+      <!-- POST 1 — Strategy -->
+      <article class="post-card fade-in delay-1" data-category="strategy">
+        <div class="post-card-header strategy">
+          <span class="post-card-header-bg-text">Strategy</span>
+          <div class="post-card-header-icon">
+            <i class="fa-solid fa-chess-knight"></i>
+          </div>
+        </div>
+        <div class="post-card-body">
+          <div class="post-card-cat">Strategy</div>
+          <h2 class="post-card-title">Are You Actually Up? Why Most Casino Players Don't Know Their Real Numbers</h2>
+          <p class="post-card-excerpt">Most players have a rough idea of how they're doing. A big win here, a bad session there. But when you add it all up across every casino — are you actually up or down? The answer might surprise you.</p>
+          <div class="post-card-footer">
+            <span class="post-card-date">March 15, 2026</span>
+            <a href="#" class="post-card-link">Read More <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </article>
+
+      <!-- POST 2 — Tracking -->
+      <article class="post-card fade-in delay-2" data-category="tracking">
+        <div class="post-card-header tracking">
+          <span class="post-card-header-bg-text">Tracking</span>
+          <div class="post-card-header-icon">
+            <i class="fa-solid fa-chart-bar"></i>
+          </div>
+        </div>
+        <div class="post-card-body">
+          <div class="post-card-cat">Tracking</div>
+          <h2 class="post-card-title">How to Set Gambling Limits That Actually Work Across Multiple Casinos</h2>
+          <p class="post-card-excerpt">Setting a limit at one casino is easy. But if you play at three, four or five different sites, those individual limits mean nothing. Here's how to set limits that give you the full picture.</p>
+          <div class="post-card-footer">
+            <span class="post-card-date">March 28, 2026</span>
+            <a href="#" class="post-card-link">Read More <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </article>
+
+      <!-- POST 3 — Strategy -->
+      <article class="post-card fade-in delay-3" data-category="strategy">
+        <div class="post-card-header strategy">
+          <span class="post-card-header-bg-text">Strategy</span>
+          <div class="post-card-header-icon">
+            <i class="fa-solid fa-lightbulb"></i>
+          </div>
+        </div>
+        <div class="post-card-body">
+          <div class="post-card-cat">Strategy</div>
+          <h2 class="post-card-title">The Smartest Thing You Can Do Before Your Next Casino Session</h2>
+          <p class="post-card-excerpt">It takes two minutes. Most players never do it. But the players who do consistently make better decisions, stay in control longer and actually know whether they're winning. Here's what it is.</p>
+          <div class="post-card-footer">
+            <span class="post-card-date">April 5, 2026</span>
+            <a href="#" class="post-card-link">Read More <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </article>
+
+    </div><!-- /posts-grid -->
+
+    <div class="posts-empty" id="postsEmpty">
+      <i class="fa-solid fa-file-circle-xmark"></i>
+      No posts in this category yet. Check back soon.
+    </div>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     FINAL CTA
+================================================================ -->
+<section class="final-cta">
+  <div class="final-cta-glow"></div>
+  <div class="final-cta-inner fade-in">
+    <h2 class="final-cta-headline">Ready to put it into practice?</h2>
+    <p class="final-cta-sub">Create your free Casiflow account and start tracking today.</p>
+    <a href="https://app.casiflow.com/signup" class="btn-cta-lg">
+      <i class="fa-solid fa-arrow-right"></i>
+      Create My Free Account
+    </a>
+    <p class="cta-login-link">Already have an account? <a href="https://app.casiflow.com/login">Log in</a></p>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     FOOTER
+================================================================ -->
+<footer class="footer">
+  <div class="footer-main">
+    <div>
+      <div class="footer-brand">Casiflow</div>
+      <p class="footer-tagline">The house tracks everything. So should you.</p>
+    </div>
+
+    <div>
+      <p class="footer-col-title">Navigation</p>
+      <ul class="footer-list">
+        <li><a href="features.html">Features</a></li>
+        <li><a href="responsible-gambling.html">Responsible Gambling</a></li>
+        <li><a href="playbook.html">The Playbook</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="footer-col-title">Legal</p>
+      <ul class="footer-list">
+        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+        <li><a href="terms.html">Terms &amp; Conditions</a></li>
+        <li><a href="responsible-gambling.html">Responsible Gambling</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="partner.html">Partner with us</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2026 Casiflow. All rights reserved.</p>
+    <div class="footer-legal">
+      <a href="privacy-policy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ================================================================
+     JAVASCRIPT
+================================================================ -->
+<script>
+  /* --- Nav scroll shadow --- */
+  const nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+  }, { passive: true });
+
+  /* --- Hamburger menu --- */
+  const hamburger  = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  hamburger.addEventListener('click', () => {
+    const open = mobileMenu.classList.toggle('open');
+    hamburger.classList.toggle('open', open);
+    hamburger.setAttribute('aria-expanded', open);
+  });
+
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      hamburger.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  /* --- Category filter --- */
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const postCards  = document.querySelectorAll('.post-card');
+  const postsInner = document.getElementById('postsInner');
+  const postsEmpty = document.getElementById('postsEmpty');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cat = btn.dataset.filter;
+
+      /* Update active pill */
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      /* Fade the grid out, swap visibility, fade back in */
+      postsInner.style.opacity = '0';
+
+      setTimeout(() => {
+        let visibleCount = 0;
+
+        postCards.forEach(card => {
+          const match = cat === 'all' || card.dataset.category === cat;
+          card.style.display = match ? '' : 'none';
+          if (match) visibleCount++;
+        });
+
+        postsEmpty.style.display = visibleCount === 0 ? 'block' : 'none';
+        postsInner.style.opacity = '1';
+      }, 180);
+    });
+  });
+
+  /* --- Scroll-triggered fade-in via IntersectionObserver --- */
+  const fadeEls = document.querySelectorAll('.fade-in');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.10, rootMargin: '0px 0px -40px 0px' });
+
+  fadeEls.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
