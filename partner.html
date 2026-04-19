@@ -327,6 +327,19 @@
       text-align: center;
     }
     .success-message.visible { display: block; }
+    .error-message {
+      display: none;
+      background: rgba(239,68,68,0.08);
+      border: 1px solid rgba(239,68,68,0.28);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-top: 16px;
+      text-align: center;
+      font-size: 14px;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.5;
+    }
+    .error-message.visible { display: block; }
     .success-icon { font-size: 24px; color: #22c55e; margin-bottom: 10px; }
     .success-title { font-size: 15px; font-weight: 700; color: #f8fafc; margin-bottom: 6px; }
     .success-copy { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.55; }
@@ -529,6 +542,10 @@
 
       </form>
 
+      <div class="error-message" id="partnerError">
+        Something went wrong — please try again or email us at <a href="mailto:partnerships@casiflow.com" style="color:#38bdf8;">partnerships@casiflow.com</a>
+      </div>
+
       <div class="success-message" id="partnerSuccess">
         <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
         <p class="success-title">Message sent!</p>
@@ -625,9 +642,10 @@
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
   /* --- Partner form validation & success state --- */
-  const partnerForm   = document.getElementById('partnerForm');
+  const partnerForm    = document.getElementById('partnerForm');
   const partnerSuccess = document.getElementById('partnerSuccess');
-  const submitBtn     = document.getElementById('partnerSubmitBtn');
+  const partnerError   = document.getElementById('partnerError');
+  const submitBtn      = document.getElementById('partnerSubmitBtn');
 
   const nameInput     = document.getElementById('partnerName');
   const emailInput    = document.getElementById('partnerEmail');
@@ -656,24 +674,44 @@
   companyInput.addEventListener('input', () => clearError(companyInput, companyError));
   messageInput.addEventListener('input', () => clearError(messageInput, messageError));
 
-  partnerForm.addEventListener('submit', (e) => {
+  partnerForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     let valid = true;
 
-    if (!nameInput.value.trim())       { showError(nameInput,    nameError);    valid = false; }
+    if (!nameInput.value.trim())         { showError(nameInput,    nameError);    valid = false; }
     if (!isValidEmail(emailInput.value)) { showError(emailInput,   emailError);   valid = false; }
-    if (!companyInput.value.trim())    { showError(companyInput, companyError); valid = false; }
-    if (!messageInput.value.trim())    { showError(messageInput, messageError); valid = false; }
+    if (!companyInput.value.trim())      { showError(companyInput, companyError); valid = false; }
+    if (!messageInput.value.trim())      { showError(messageInput, messageError); valid = false; }
 
     if (!valid) return;
 
     submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="fa-solid fa-circle-check"></i> Sent!';
+    submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Sending…';
+    partnerError.classList.remove('visible');
 
-    setTimeout(() => {
-      partnerForm.style.display = 'none';
-      partnerSuccess.classList.add('visible');
-    }, 320);
+    try {
+      const res = await fetch('/api/partner', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: nameInput.value.trim(),
+          email: emailInput.value.trim(),
+          company: companyInput.value.trim(),
+          proposal: messageInput.value.trim(),
+        }),
+      });
+
+      if (res.ok) {
+        partnerForm.style.display = 'none';
+        partnerSuccess.classList.add('visible');
+      } else {
+        throw new Error('Server error');
+      }
+    } catch {
+      partnerError.classList.add('visible');
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send Message';
+    }
   });
 </script>
 
