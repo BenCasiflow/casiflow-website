@@ -1,7 +1,6 @@
 export default async function handler(req, res) {
   try {
     const apiKey = process.env.RESEND_API_KEY;
-    console.log('Function started — RESEND_API_KEY prefix:', apiKey ? apiKey.slice(0, 5) : 'MISSING');
 
     if (req.method !== 'POST') {
       return res.status(405).json({ error: 'Method not allowed' });
@@ -10,7 +9,6 @@ export default async function handler(req, res) {
     const { name, email, subject, message } = req.body;
 
     if (!name || !email || !subject || !message) {
-      console.log('Validation failed — missing fields:', { name: !!name, email: !!email, subject: !!subject, message: !!message });
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
@@ -36,8 +34,6 @@ export default async function handler(req, res) {
       <p>${message.replace(/\n/g, '<br>')}</p>
     `;
 
-    console.log('About to call Resend — to: support@casiflow.com, subject:', `Contact Form: ${subjectLabel}`);
-
     const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
@@ -52,8 +48,6 @@ export default async function handler(req, res) {
         html: htmlBody,
       }),
     });
-
-    console.log('Resend response status:', response.status);
 
     if (!response.ok) {
       const errorBody = await response.json().catch(() => ({}));
