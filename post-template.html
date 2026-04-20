@@ -1,11 +1,30 @@
+<!--
+  ================================================================
+  CASIFLOW PLAYBOOK — BLOG POST TEMPLATE
+  ================================================================
+  HOW TO ADD A NEW BLOG POST:
+
+  1. Duplicate post-template.html and rename it using the post slug
+     e.g. my-post-title.html
+
+  2. Replace all placeholder sections (marked with PLACEHOLDER comments)
+     with your actual content
+
+  3. Add a new card to playbook.html by copying an existing card and
+     updating the title, excerpt, date, category and link
+
+  4. Push to GitHub — Vercel deploys automatically
+  ================================================================
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Playbook — Casiflow</title>
-  <meta name="description" content="Strategy, insights and guides for players who take their gambling seriously." />
+  <!-- POST TITLE: Replace with your post title -->
+  <title>Post Title — The Playbook — Casiflow</title>
+  <meta name="description" content="Post description for SEO." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -42,7 +61,7 @@
     .delay-3 { transition-delay: 0.30s; }
 
     /* ============================================================
-       NAVIGATION — identical to index.html
+       NAVIGATION
     ============================================================ */
     .nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
@@ -125,120 +144,158 @@
     .mobile-menu-actions .btn-teal { flex: 1; text-align: center; }
 
     /* ============================================================
-       PAGE HERO — compact, diagonal texture
+       POST HERO
     ============================================================ */
-    .page-hero {
-      padding: 112px 32px 36px;
+    .post-hero {
+      background: #0f172a;
+      padding: 112px 32px 56px;
       text-align: center;
       position: relative;
       overflow: hidden;
-      /* Diagonal line texture for "strategy document" feel */
-      background-color: #0f172a;
-      background-image:
-        repeating-linear-gradient(
-          -45deg,
-          transparent,
-          transparent 20px,
-          rgba(56,189,248,0.022) 20px,
-          rgba(56,189,248,0.022) 21px
-        );
     }
-    /* Radial glow to lift the content area */
-    .page-hero::before {
+    .post-hero::before {
       content: '';
       position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 50% 110%, rgba(14,165,233,0.10) 0%, transparent 60%);
-      pointer-events: none;
+      background: radial-gradient(ellipse at 50% 0%, rgba(14,165,233,0.07) 0%, transparent 65%);
+      z-index: 0; pointer-events: none;
     }
-    /* Fade the texture at top and bottom */
-    .page-hero::after {
-      content: '';
-      position: absolute; inset: 0;
-      background:
-        linear-gradient(to bottom, #0f172a 0%, transparent 30%, transparent 70%, #0b1628 100%);
-      pointer-events: none;
-    }
-    .page-hero-inner {
+    .post-hero-inner {
       position: relative; z-index: 1;
+      max-width: 760px; margin: 0 auto;
     }
-    .page-hero-eyebrow {
-      display: inline-flex; align-items: center; gap: 10px;
-      font-size: 12px; font-weight: 700; color: #38bdf8;
-      letter-spacing: 3px; text-transform: uppercase; margin-bottom: 18px;
+    .post-hero-cat {
+      display: inline-block;
+      font-size: 11px; font-weight: 700; color: #0ea5e9;
+      letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 18px;
     }
-    .page-hero-eyebrow-line {
-      display: inline-block; width: 28px; height: 1px; background: #38bdf8; opacity: 0.5;
-    }
-    .page-hero-headline {
+    .post-hero-title {
       font-family: 'Playfair Display', serif;
-      font-size: clamp(1.8rem, 2.2vw, 2.5rem); font-weight: 900;
-      color: #f8fafc; line-height: 1.14; letter-spacing: -0.3px;
-      margin-bottom: 16px; max-width: 640px; margin-left: auto; margin-right: auto;
+      font-size: clamp(1.9rem, 3.5vw, 3rem);
+      font-weight: 900; color: #f8fafc; line-height: 1.12;
+      letter-spacing: -0.5px; margin-bottom: 24px;
     }
-    .page-hero-sub {
-      font-size: 17px; color: rgba(255,255,255,0.55); line-height: 1.7;
-      max-width: 500px; margin: 0 auto;
+    .post-hero-meta {
+      font-size: 14px; color: rgba(255,255,255,0.45);
+    }
+    .post-hero-meta .dot { margin: 0 8px; color: rgba(255,255,255,0.2); }
+    .post-hero-back {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.4);
+      margin-bottom: 28px; transition: color 0.2s;
+    }
+    .post-hero-back:hover { color: #38bdf8; }
+    .post-hero-back i { font-size: 11px; }
+
+    /* ============================================================
+       HEADER IMAGE
+    ============================================================ */
+    .post-header-image {
+      /* HEADER IMAGE URL: Replace with image URL or leave as gradient */
+      background: linear-gradient(135deg, #060e1e 0%, #0f1f38 50%, #082030 100%);
+      height: 400px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; position: relative;
+    }
+    .post-header-image img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .post-header-image-overlay {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 50%, rgba(14,165,233,0.06) 0%, transparent 70%);
+    }
+    /* Ghosted icon shown when no image is set */
+    .post-header-image-placeholder {
+      position: relative; z-index: 1;
+      font-size: 64px; color: rgba(56,189,248,0.08);
     }
 
     /* ============================================================
-       CATEGORY FILTER BAR
+       ARTICLE BODY
     ============================================================ */
-    .filter-bar {
+    .post-content-wrap {
       background: #0b1628;
-      padding: 24px 32px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding: 72px 32px 80px;
     }
-    .filter-bar-inner {
-      max-width: 1100px; margin: 0 auto;
-      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    .post-content-inner {
+      max-width: 760px; margin: 0 auto;
     }
-    .filter-btn {
-      padding: 8px 20px; border-radius: 100px;
-      font-size: 13px; font-weight: 600; cursor: pointer;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(30,41,59,0.6);
-      color: rgba(255,255,255,0.48);
-      transition: background 0.2s, border-color 0.2s, color 0.2s;
-      font-family: 'Inter', sans-serif;
-      line-height: 1;
+    .post-content-inner h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.3rem, 2vw, 1.65rem);
+      font-weight: 700; color: #f8fafc;
+      line-height: 1.25; margin: 52px 0 20px;
     }
-    .filter-btn:hover {
-      background: rgba(56,189,248,0.08);
-      border-color: rgba(56,189,248,0.3);
-      color: rgba(255,255,255,0.75);
+    .post-content-inner h2:first-child { margin-top: 0; }
+    .post-content-inner p {
+      font-size: 17px; color: rgba(255,255,255,0.68);
+      line-height: 1.85; margin-bottom: 26px;
     }
-    .filter-btn.active {
-      background: #0ea5e9;
-      border-color: #0ea5e9;
-      color: white;
-      box-shadow: 0 2px 10px rgba(14,165,233,0.3);
+    .post-content-inner strong { color: rgba(255,255,255,0.88); font-weight: 700; }
+    .post-content-inner ul,
+    .post-content-inner ol { margin: 0 0 26px 26px; }
+    .post-content-inner li {
+      font-size: 17px; color: rgba(255,255,255,0.68);
+      line-height: 1.85; margin-bottom: 8px;
     }
 
-    /* ============================================================
-       POST GRID SECTION
-    ============================================================ */
-    .posts-section {
-      background: #0b1628;
-      padding: 52px 32px 96px;
-    }
-    .posts-inner {
-      max-width: 1100px; margin: 0 auto;
-      transition: opacity 0.18s ease;
-    }
-    .posts-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-
-    /* Individual post card */
-    .post-card {
-      background: #0f172a;
-      border: 1px solid rgba(56,189,248,0.09);
+    /* Inline CTA box */
+    .inline-cta {
+      background: rgba(14,165,233,0.07);
+      border: 1px solid rgba(56,189,248,0.18);
       border-radius: 16px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
+      padding: 36px 40px;
+      margin: 52px 0;
+      text-align: center;
+    }
+    .inline-cta-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px; font-weight: 700; color: #f8fafc;
+      margin-bottom: 8px;
+    }
+    .inline-cta-sub {
+      font-size: 15px; color: rgba(255,255,255,0.5);
+      margin-bottom: 22px; line-height: 1.6;
+    }
+    .btn-cta-sm {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 28px;
+      background: linear-gradient(135deg, #0ea5e9, #0369a1);
+      color: white; border-radius: 10px;
+      font-size: 15px; font-weight: 700;
+      transition: all 0.25s;
+      box-shadow: 0 6px 20px rgba(14,165,233,0.35);
+    }
+    .btn-cta-sm:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(14,165,233,0.5); }
+
+    /* ============================================================
+       RELATED POSTS
+    ============================================================ */
+    .related-section {
+      background: #0f172a;
+      padding: 72px 32px 80px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .related-inner { max-width: 1100px; margin: 0 auto; }
+    .related-eyebrow {
+      font-size: 11px; font-weight: 700; color: #0ea5e9;
+      letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 12px;
+    }
+    .related-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(22px, 2.5vw, 28px); font-weight: 700;
+      color: #f8fafc; margin-bottom: 36px;
+    }
+    .related-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    }
+    .related-grid.two-col { grid-template-columns: repeat(2, 1fr); max-width: 740px; }
+
+    /* Post cards — same as playbook.html */
+    .post-card {
+      background: #0b1628;
+      border: 1px solid rgba(56,189,248,0.09);
+      border-radius: 16px; overflow: hidden;
+      display: flex; flex-direction: column;
       transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
     }
     .post-card:hover {
@@ -246,65 +303,43 @@
       transform: translateY(-4px);
       box-shadow: 0 16px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(56,189,248,0.12);
     }
-
-    /* Card header — gradient visual placeholder */
     .post-card-header {
-      height: 130px;
+      height: 110px;
       display: flex; align-items: center; justify-content: center;
       position: relative; overflow: hidden;
       border-bottom: 1px solid rgba(255,255,255,0.05);
     }
-    /* Large ghosted category text behind the icon */
     .post-card-header-bg-text {
       position: absolute;
       font-family: 'Playfair Display', serif;
-      font-size: 72px; font-weight: 900;
+      font-size: 64px; font-weight: 900;
       color: rgba(56,189,248,0.05);
       letter-spacing: -3px;
-      user-select: none; pointer-events: none;
-      white-space: nowrap;
+      user-select: none; pointer-events: none; white-space: nowrap;
     }
     .post-card-header-icon {
       position: relative; z-index: 1;
-      width: 56px; height: 56px; border-radius: 14px;
+      width: 48px; height: 48px; border-radius: 12px;
       background: rgba(56,189,248,0.1); border: 1px solid rgba(56,189,248,0.2);
       display: flex; align-items: center; justify-content: center;
-      font-size: 24px; color: #38bdf8;
+      font-size: 20px; color: #38bdf8;
     }
-
-    /* Strategy gradient */
-    .post-card-header.strategy {
-      background: linear-gradient(135deg, #060e1e 0%, #0f1f38 100%);
-    }
-    /* Tracking gradient — slight teal tint */
-    .post-card-header.tracking {
-      background: linear-gradient(135deg, #060e1e 0%, #082030 100%);
-    }
-    /* Responsible Gambling gradient — slight purple tint */
-    .post-card-header.responsible {
-      background: linear-gradient(135deg, #060e1e 0%, #100d28 100%);
-    }
-
-    /* Card body */
-    .post-card-body {
-      padding: 24px; flex: 1; display: flex; flex-direction: column;
-    }
+    .post-card-header.strategy   { background: linear-gradient(135deg, #060e1e 0%, #0f1f38 100%); }
+    .post-card-header.tracking   { background: linear-gradient(135deg, #060e1e 0%, #082030 100%); }
+    .post-card-header.responsible { background: linear-gradient(135deg, #060e1e 0%, #100d28 100%); }
+    .post-card-body { padding: 22px; flex: 1; display: flex; flex-direction: column; }
     .post-card-cat {
       font-size: 10px; font-weight: 700; color: #0ea5e9;
-      letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px;
+      letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px;
     }
     .post-card-title {
       font-family: 'Playfair Display', serif;
-      font-size: 18px; font-weight: 700; color: #f8fafc;
-      line-height: 1.3; margin-bottom: 12px;
-    }
-    .post-card-excerpt {
-      font-size: 14px; color: rgba(255,255,255,0.48);
-      line-height: 1.7; flex: 1; margin-bottom: 20px;
+      font-size: 17px; font-weight: 700; color: #f8fafc;
+      line-height: 1.3; margin-bottom: 10px; flex: 1;
     }
     .post-card-footer {
       display: flex; align-items: center; justify-content: space-between;
-      padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.06); margin-top: 14px;
     }
     .post-card-date { font-size: 12px; color: rgba(255,255,255,0.3); font-weight: 500; }
     .post-card-link {
@@ -315,16 +350,8 @@
     .post-card-link:hover { gap: 10px; color: #7dd3fc; }
     .post-card-link i { font-size: 11px; }
 
-    /* Empty state when no posts match filter */
-    .posts-empty {
-      display: none;
-      text-align: center; padding: 64px 32px;
-      color: rgba(255,255,255,0.32); font-size: 15px;
-    }
-    .posts-empty i { display: block; font-size: 36px; margin-bottom: 16px; opacity: 0.3; }
-
     /* ============================================================
-       FINAL CTA — identical to index.html
+       FINAL CTA
     ============================================================ */
     .final-cta { position: relative; background: #060d1a; overflow: hidden; }
     .final-cta-glow {
@@ -360,7 +387,7 @@
     .cta-login-link a:hover { color: #7dd3fc; }
 
     /* ============================================================
-       FOOTER — identical to index.html
+       FOOTER
     ============================================================ */
     .footer {
       background: #060d1a;
@@ -392,23 +419,23 @@
     /* ============================================================
        RESPONSIVE
     ============================================================ */
-    @media (max-width: 1024px) {
-      .posts-grid { grid-template-columns: repeat(2, 1fr); }
-    }
     @media (max-width: 768px) {
       .nav-links   { display: none; }
       .nav-actions { display: none; }
       .hamburger   { display: flex; }
       .nav-inner   { padding: 0 20px; }
-      .page-hero   { padding: 100px 20px 28px; }
-      .page-hero-headline { font-size: 1.8rem; }
-      .filter-bar  { padding: 20px; }
-      .posts-section { padding: 40px 20px 72px; }
-      .posts-grid  { grid-template-columns: 1fr; }
+      .post-hero   { padding: 100px 20px 40px; }
+      .post-hero-title { font-size: 1.8rem; }
+      .post-header-image { height: 240px; }
+      .post-content-wrap { padding: 48px 20px 56px; }
+      .inline-cta  { padding: 28px 24px; }
+      .related-section { padding: 52px 20px 60px; }
+      .related-grid { grid-template-columns: 1fr; }
+      .related-grid.two-col { grid-template-columns: 1fr; max-width: 100%; }
+      .final-cta-inner { padding: 80px 20px; }
       .footer-main { grid-template-columns: 1fr; gap: 32px; }
       .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
       .footer-legal  { flex-wrap: wrap; justify-content: center; }
-      .final-cta-inner { padding: 80px 20px; }
     }
   </style>
 </head>
@@ -432,7 +459,7 @@
     </ul>
 
     <div class="nav-actions">
-      <a href="https://app.casiflow.com"  class="btn-outline">Log In</a>
+      <a href="https://app.casiflow.com" class="btn-outline">Log In</a>
       <a href="https://app.casiflow.com/signup" class="btn-teal">Sign Up</a>
     </div>
 
@@ -449,7 +476,7 @@
     <a href="about.html">About</a>
     <a href="contact.html">Contact</a>
     <div class="mobile-menu-actions">
-      <a href="https://app.casiflow.com"  class="btn-outline">Log In</a>
+      <a href="https://app.casiflow.com" class="btn-outline">Log In</a>
       <a href="https://app.casiflow.com/signup" class="btn-teal">Sign Up Free</a>
     </div>
   </div>
@@ -457,116 +484,147 @@
 
 
 <!-- ================================================================
-     PAGE HERO
+     POST HERO
 ================================================================ -->
-<section class="page-hero">
-  <div class="page-hero-inner fade-in">
-    <div class="page-hero-eyebrow">
-      <span class="page-hero-eyebrow-line"></span>
-      The Playbook
-      <span class="page-hero-eyebrow-line"></span>
+<section class="post-hero">
+  <div class="post-hero-inner fade-in">
+    <a href="playbook.html" class="post-hero-back">
+      <i class="fa-solid fa-arrow-left"></i> The Playbook
+    </a>
+    <!-- POST CATEGORY: Replace with Strategy, Tracking or Responsible Gambling -->
+    <div class="post-hero-cat">Strategy</div>
+    <!-- POST TITLE: Replace with your post title -->
+    <h1 class="post-hero-title">Your Post Title Goes Here</h1>
+    <div class="post-hero-meta">
+      By Casiflow
+      <span class="dot">·</span>
+      <!-- POST DATE: Replace with publication date e.g. April 20, 2026 -->
+      April 20, 2026
     </div>
-    <h1 class="page-hero-headline">Your edge starts here.</h1>
-    <p class="page-hero-sub">Strategy, insights and guides for players who take their gambling seriously.</p>
   </div>
 </section>
 
 
 <!-- ================================================================
-     CATEGORY FILTER BAR
+     HEADER IMAGE
+     HEADER IMAGE URL: Replace with image URL or leave as gradient
 ================================================================ -->
-<div class="filter-bar">
-  <div class="filter-bar-inner">
-    <button class="filter-btn active" data-filter="all">All</button>
-    <button class="filter-btn" data-filter="strategy">Strategy</button>
-    <button class="filter-btn" data-filter="tracking">Tracking</button>
-    <button class="filter-btn" data-filter="responsible">Responsible Gambling</button>
+<div class="post-header-image">
+  <div class="post-header-image-overlay"></div>
+  <div class="post-header-image-placeholder">
+    <i class="fa-solid fa-chess-knight"></i>
   </div>
 </div>
 
 
 <!-- ================================================================
-     BLOG POST GRID
+     ARTICLE BODY
 ================================================================ -->
-<section class="posts-section">
-  <div class="posts-inner" id="postsInner">
-    <div class="posts-grid" id="postsGrid">
+<section class="post-content-wrap">
+  <div class="post-content-inner">
 
-      <!-- POST 1 — Strategy -->
-      <article class="post-card fade-in delay-1" data-category="strategy">
-        <div class="post-card-header strategy">
-          <span class="post-card-header-bg-text">Strategy</span>
-          <div class="post-card-header-icon">
-            <i class="fa-solid fa-chess-knight"></i>
-          </div>
-        </div>
-        <div class="post-card-body">
-          <div class="post-card-cat">Strategy</div>
-          <h2 class="post-card-title">Are You Actually Up? Why Most Casino Players Don't Know Their Real Numbers</h2>
-          <p class="post-card-excerpt">Most players have a rough idea of how they're doing. A big win here, a bad session there. But when you add it all up across every casino — are you actually up or down? The answer might surprise you.</p>
-          <div class="post-card-footer">
-            <span class="post-card-date">March 15, 2026</span>
-            <a href="are-you-actually-up.html" class="post-card-link">Read More <i class="fa-solid fa-arrow-right"></i></a>
-          </div>
-        </div>
-      </article>
+    <!-- POST BODY START -->
 
-      <!-- POST 2 — Tracking -->
-      <article class="post-card fade-in delay-2" data-category="tracking">
-        <div class="post-card-header tracking">
-          <span class="post-card-header-bg-text">Tracking</span>
-          <div class="post-card-header-icon">
-            <i class="fa-solid fa-chart-bar"></i>
-          </div>
-        </div>
-        <div class="post-card-body">
-          <div class="post-card-cat">Tracking</div>
-          <h2 class="post-card-title">How to Set Gambling Limits That Actually Work Across Multiple Casinos</h2>
-          <p class="post-card-excerpt">Setting a limit at one casino is easy. But if you play at three, four or five different sites, those individual limits mean nothing. Here's how to set limits that give you the full picture.</p>
-          <div class="post-card-footer">
-            <span class="post-card-date">March 28, 2026</span>
-            <a href="how-to-set-gambling-limits.html" class="post-card-link">Read More <i class="fa-solid fa-arrow-right"></i></a>
-          </div>
-        </div>
-      </article>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Most players have a rough idea of how they're doing — a big win here, a rough session there. But when you actually add it all up, the number is rarely what you expect.</p>
 
-      <!-- POST 3 — Strategy -->
-      <article class="post-card fade-in delay-3" data-category="strategy">
-        <div class="post-card-header strategy">
-          <span class="post-card-header-bg-text">Strategy</span>
-          <div class="post-card-header-icon">
-            <i class="fa-solid fa-lightbulb"></i>
-          </div>
-        </div>
-        <div class="post-card-body">
-          <div class="post-card-cat">Strategy</div>
-          <h2 class="post-card-title">The Smartest Thing You Can Do Before Your Next Casino Session</h2>
-          <p class="post-card-excerpt">It takes two minutes. Most players never do it. But the players who do consistently make better decisions, stay in control longer and actually know whether they're winning. Here's what it is.</p>
-          <div class="post-card-footer">
-            <span class="post-card-date">April 5, 2026</span>
-            <a href="smartest-thing-before-casino-session.html" class="post-card-link">Read More <i class="fa-solid fa-arrow-right"></i></a>
-          </div>
-        </div>
-      </article>
+    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. <strong>The players who know their exact position are the ones who stay in control.</strong> Everyone else is flying blind, relying on memory and gut feeling — neither of which are reliable.</p>
 
-    </div><!-- /posts-grid -->
+    <h2>Why Most Players Get This Wrong</h2>
 
-    <div class="posts-empty" id="postsEmpty">
-      <i class="fa-solid fa-file-circle-xmark"></i>
-      No posts in this category yet. Check back soon.
+    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+
+    <!-- POST BODY END -->
+
+  </div>
+
+  <!-- INLINE CTA -->
+  <div class="post-content-inner">
+    <div class="inline-cta">
+      <p class="inline-cta-headline">Enjoyed this? Start tracking your gambling for free.</p>
+      <p class="inline-cta-sub">Casiflow gives you one clear view of your position across every casino you play at.</p>
+      <a href="https://app.casiflow.com/signup" class="btn-cta-sm">
+        <i class="fa-solid fa-arrow-right"></i>
+        Create My Free Account
+      </a>
     </div>
   </div>
 </section>
 
 
 <!-- ================================================================
-     FINAL CTA
+     RELATED POSTS
+     RELATED POST 1, 2, 3: Update title, URL and date for each
+================================================================ -->
+<section class="related-section">
+  <div class="related-inner fade-in">
+    <p class="related-eyebrow">The Playbook</p>
+    <h2 class="related-headline">Keep reading</h2>
+
+    <div class="related-grid">
+
+      <!-- RELATED POST 1 -->
+      <a href="are-you-actually-up.html" class="post-card">
+        <div class="post-card-header strategy">
+          <span class="post-card-header-bg-text">Strategy</span>
+          <div class="post-card-header-icon"><i class="fa-solid fa-chess-knight"></i></div>
+        </div>
+        <div class="post-card-body">
+          <div class="post-card-cat">Strategy</div>
+          <h3 class="post-card-title">Are You Actually Up? Most Casino Players Don't Know</h3>
+          <div class="post-card-footer">
+            <span class="post-card-date">March 15, 2026</span>
+            <span class="post-card-link">Read More <i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+        </div>
+      </a>
+
+      <!-- RELATED POST 2 -->
+      <a href="how-to-set-gambling-limits.html" class="post-card">
+        <div class="post-card-header tracking">
+          <span class="post-card-header-bg-text">Tracking</span>
+          <div class="post-card-header-icon"><i class="fa-solid fa-chart-bar"></i></div>
+        </div>
+        <div class="post-card-body">
+          <div class="post-card-cat">Tracking</div>
+          <h3 class="post-card-title">How to Set Gambling Limits That Actually Work</h3>
+          <div class="post-card-footer">
+            <span class="post-card-date">March 28, 2026</span>
+            <span class="post-card-link">Read More <i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+        </div>
+      </a>
+
+      <!-- RELATED POST 3 -->
+      <a href="smartest-thing-before-casino-session.html" class="post-card">
+        <div class="post-card-header strategy">
+          <span class="post-card-header-bg-text">Strategy</span>
+          <div class="post-card-header-icon"><i class="fa-solid fa-lightbulb"></i></div>
+        </div>
+        <div class="post-card-body">
+          <div class="post-card-cat">Strategy</div>
+          <h3 class="post-card-title">The Smartest Thing You Can Do Before Your Next Casino Session</h3>
+          <div class="post-card-footer">
+            <span class="post-card-date">April 5, 2026</span>
+            <span class="post-card-link">Read More <i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     BOTTOM CTA
 ================================================================ -->
 <section class="final-cta">
   <div class="final-cta-glow"></div>
   <div class="final-cta-inner fade-in">
-    <h2 class="final-cta-headline">Ready to put it into practice?</h2>
-    <p class="final-cta-sub">Create your free Casiflow account and start tracking today.</p>
+    <h2 class="final-cta-headline">You've been playing blind. It's time to change that.</h2>
+    <p class="final-cta-sub">Join Casiflow for free and finally know exactly where you stand.</p>
     <a href="https://app.casiflow.com/signup" class="btn-cta-lg">
       <i class="fa-solid fa-arrow-right"></i>
       Create My Free Account
@@ -649,41 +707,7 @@
     });
   });
 
-  /* --- Category filter --- */
-  const filterBtns = document.querySelectorAll('.filter-btn');
-  const postCards  = document.querySelectorAll('.post-card');
-  const postsInner = document.getElementById('postsInner');
-  const postsEmpty = document.getElementById('postsEmpty');
-
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const cat = btn.dataset.filter;
-
-      /* Update active pill */
-      filterBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      /* Fade the grid out, swap visibility, fade back in */
-      postsInner.style.opacity = '0';
-
-      setTimeout(() => {
-        let visibleCount = 0;
-
-        postCards.forEach(card => {
-          const match = cat === 'all' || card.dataset.category === cat;
-          card.style.display = match ? '' : 'none';
-          if (match) visibleCount++;
-        });
-
-        postsEmpty.style.display = visibleCount === 0 ? 'block' : 'none';
-        postsInner.style.opacity = '1';
-      }, 180);
-    });
-  });
-
-  /* --- Scroll-triggered fade-in via IntersectionObserver --- */
-  const fadeEls = document.querySelectorAll('.fade-in');
-
+  /* --- Scroll-triggered fade-in --- */
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -691,9 +715,9 @@
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.10, rootMargin: '0px 0px -40px 0px' });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
-  fadeEls.forEach(el => observer.observe(el));
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 </script>
 
 </body>
