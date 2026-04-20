@@ -187,29 +187,6 @@
     .post-hero-back i { font-size: 11px; }
 
     /* ============================================================
-       HEADER IMAGE
-    ============================================================ */
-    .post-header-image {
-      /* HEADER IMAGE URL: Replace with image URL or leave as gradient */
-      background: linear-gradient(135deg, #060e1e 0%, #0f1f38 50%, #082030 100%);
-      height: 400px;
-      display: flex; align-items: center; justify-content: center;
-      overflow: hidden; position: relative;
-    }
-    .post-header-image img {
-      width: 100%; height: 100%; object-fit: cover; display: block;
-    }
-    .post-header-image-overlay {
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 50% 50%, rgba(14,165,233,0.06) 0%, transparent 70%);
-    }
-    /* Ghosted icon shown when no image is set */
-    .post-header-image-placeholder {
-      position: relative; z-index: 1;
-      font-size: 64px; color: rgba(56,189,248,0.08);
-    }
-
-    /* ============================================================
        ARTICLE BODY
     ============================================================ */
     .post-content-wrap {
@@ -426,7 +403,6 @@
       .nav-inner   { padding: 0 20px; }
       .post-hero   { padding: 100px 20px 40px; }
       .post-hero-title { font-size: 1.8rem; }
-      .post-header-image { height: 240px; }
       .post-content-wrap { padding: 48px 20px 56px; }
       .inline-cta  { padding: 28px 24px; }
       .related-section { padding: 52px 20px 60px; }
@@ -503,18 +479,6 @@
     </div>
   </div>
 </section>
-
-
-<!-- ================================================================
-     HEADER IMAGE
-     HEADER IMAGE URL: Replace with image URL or leave as gradient
-================================================================ -->
-<div class="post-header-image">
-  <div class="post-header-image-overlay"></div>
-  <div class="post-header-image-placeholder">
-    <i class="fa-solid fa-chess-knight"></i>
-  </div>
-</div>
 
 
 <!-- ================================================================
